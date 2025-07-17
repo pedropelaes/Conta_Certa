@@ -7,7 +7,7 @@ Com ele, os usuários podem:
 - Relacionar quem consumiu o quê;
 - E, por fim, calcular de forma justa quanto cada pessoa deve pagar.
 
-#Objetivo do Projeto
+# Objetivo do Projeto
 Este é um projeto pessoal com o intuito de:
 - Aprimorar minhas habilidades de programação;
 - Adquirir experiência prática no desenvolvimento mobile;
