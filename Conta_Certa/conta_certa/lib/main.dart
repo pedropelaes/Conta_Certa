@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:device_preview/device_preview.dart';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
-import 'screens/OpeningScreen.dart';
+import 'screens/openingScreen.dart';
 import 'theme/theme.dart';
 import 'theme/util.dart';
 
 void main() {
   runApp(
     DevicePreview(
-      enabled: !Platform.isAndroid && !Platform.isIOS,
+      enabled: kIsWeb || !Platform.isAndroid && !Platform.isIOS,
       builder: (context) => const MainApp(),
     ),
   );
