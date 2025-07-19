@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import 'screens/opening_screen.dart';
 import 'screens/main_screen.dart';
+import 'screens/settings.dart';
 import 'theme/theme.dart';
 import 'theme/util.dart';
 
@@ -35,7 +36,7 @@ class MainApp extends StatelessWidget {
         darkTheme: darkScheme.dark(), // Aplica o tema escuro
         themeMode: ThemeMode.system, // Usa o tema do sistema (claro/escuro)
       ),
-      home: MainScreen(),
+      home: Settings(),
     );
   }
 }

@@ -25,11 +25,13 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: theme.colorScheme.surface,
         title: Row(
           children: [
-            Image.asset(
-              'assets/images/conta_certa_logo.png',
-              width: 60,
-              height: 60,
-              ),
+            Expanded(
+              child: Image.asset(
+                'assets/images/conta_certa_logo.png',
+                width: 60,
+                height: 60,
+                ),
+            ),
             SizedBox(width: 5,),
             Text(
               'Seus eventos',
@@ -37,8 +39,10 @@ class _MainScreenState extends State<MainScreen> {
                 color: theme.colorScheme.onSurface,
               ),
             ),
-            Spacer(flex: 3,),
-            PlatformIconButton(
+          ],
+        ),
+        actions: [
+          PlatformIconButton(
               onPressed: (){},
               icon: Icon(
                 Icons.settings,
@@ -54,8 +58,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             SizedBox(width: 8,),
-          ],
-        ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
