@@ -1,3 +1,4 @@
+import 'package:conta_certa/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -39,7 +40,9 @@ class OpeningScreen extends StatelessWidget {
                 IntroductionText(responsiveFontSize: responsiveFontSize,),
                 Spacer(flex: 2,),
                 PlatformElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
+                  },
                   color: theme.colorScheme.primaryContainer,
                   child: Text("Começar", style: textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.onPrimaryContainer,

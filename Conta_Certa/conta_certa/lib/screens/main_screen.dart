@@ -1,3 +1,4 @@
+import 'package:conta_certa/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -23,6 +24,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.surface,
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             Expanded(
@@ -43,7 +45,9 @@ class _MainScreenState extends State<MainScreen> {
         ),
         actions: [
           PlatformIconButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
+              },
               icon: Icon(
                 Icons.settings,
                 size: 30,

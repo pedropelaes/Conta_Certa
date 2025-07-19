@@ -1,7 +1,10 @@
+import 'package:conta_certa/theme/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings ({super.key});
@@ -11,30 +14,69 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  Map<String, bool> _themeOptions = {
-    "Sistema": true, // Inicialmente marcado
-    "Claro": false,
-    "Claro1": false,
-    "Claro2": false,
-    "Escuro": false,
-    "Escuro1": false,
-    "Escuro2": false,
+  final Map<String, bool> _themeOptions = {
+    "system": true,
+    "light": false,
+    "light_high_contrast": false,
+    "dark": false,
+    "dark_high_contrast": false,
   };
 
-  void _onOptionChanged(String optionText, bool? newValue) {
-    // 3. Usar setState para atualizar o estado e redesenhar a UI
+  void _onOptionChanged(String optionText, bool? newValue) async {
+    if (newValue == false && _themeOptions[optionText] == true){
+      int checkedCount = _themeOptions.values.where((value)=>value).length;
+      if(checkedCount == 1) return;
+    }
+    
     setState(() {
-      // Desmarcar todas as outras opções (se for um radio button-like behavior)
       _themeOptions.forEach((key, value) {
         _themeOptions[key] = false;
       });
-      // Marcar apenas a opção selecionada
       _themeOptions[optionText] = newValue ?? false;
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selected_theme', optionText);
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _loadSavedTheme();
+  }
+
+  void _loadSavedTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedTheme = prefs.getString('selected_theme') ?? 'system';
+
+    setState((){
+      _themeOptions.updateAll((key, value) => false);
+      _themeOptions[savedTheme] = true;
+    });
+
+    final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
+
+    switch (savedTheme) {
+      case "light":
+        themeNotifier.setTheme(ThemeMode.light);
+        break;
+      case "light_high_contrast":
+        themeNotifier.setTheme(ThemeMode.light, highContrast: true);
+        break;
+      case "dark":
+        themeNotifier.setTheme(ThemeMode.dark);
+        break;
+      case "dark_high_contrast":
+        themeNotifier.setTheme(ThemeMode.dark, highContrast: true);
+        break;
+      default:
+        themeNotifier.setTheme(ThemeMode.system);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
@@ -45,21 +87,14 @@ class _SettingsState extends State<Settings> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Row(
-          children: [
-            PlatformIconButton(
-              onPressed: (){},
-              icon: Icon(Icons.arrow_back),
-              color: theme.colorScheme.onSurface,
-            ),
+        title: 
             Text(
               "Configurações",
+              textAlign: TextAlign.left,
               style: textTheme.headlineMedium?.copyWith(
                 color: theme.colorScheme.onSurface,
               ),
             ),
-          ],
-        ),
       ),
       body: Column(
         children: [
@@ -84,19 +119,20 @@ class _SettingsState extends State<Settings> {
                       color: theme.colorScheme.onPrimaryContainer,
                     ),
                   ),
-                  _buildThemeOption(context: context, text: "Sistema", textStyle: list, isChecked: _themeOptions["Sistema"]!, onChanged: (bool? value) => {_onOptionChanged("Sistema", value)}, theme: theme),
+                  _buildThemeOption(context: context, text: "Sistema", textStyle: list, isChecked: _themeOptions["system"]!, 
+                  onChanged: (bool? value) => {_onOptionChanged("system", value), themeNotifier.setTheme(ThemeMode.system)}, theme: theme),
                   listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Claro", textStyle: list, isChecked: _themeOptions["Claro"]!, onChanged: (bool? value)=> {_onOptionChanged("Claro", value)}, theme: theme),
+                  _buildThemeOption(context: context, text: "Claro", textStyle: list, isChecked: _themeOptions["light"]!, 
+                  onChanged: (bool? value)=> {_onOptionChanged("light", value), themeNotifier.setTheme(ThemeMode.light)}, theme: theme),
                   listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Claro com contraste médio", textStyle: list, isChecked: _themeOptions["Claro1"]!, onChanged: (bool? value)=> {_onOptionChanged("Claro1", value)}, theme: theme),
+                  _buildThemeOption(context: context, text: "Claro com contraste alto", textStyle: list, isChecked: _themeOptions["light_high_contrast"]!, 
+                  onChanged: (bool? value)=> {_onOptionChanged("light_high_contrast", value), themeNotifier.setTheme(ThemeMode.light, highContrast: true)}, theme: theme),
                   listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Claro com contraste alto", textStyle: list, isChecked: _themeOptions["Claro2"]!, onChanged: (bool? value)=> {_onOptionChanged("Claro2", value)}, theme: theme),
+                  _buildThemeOption(context: context, text: "Escuro", textStyle: list, isChecked: _themeOptions["dark"]!, 
+                  onChanged: (bool? value)=> {_onOptionChanged("dark", value), themeNotifier.setTheme(ThemeMode.dark)}, theme: theme),
                   listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Escuro", textStyle: list, isChecked: _themeOptions["Escuro"]!, onChanged: (bool? value)=> {_onOptionChanged("Escuro", value)}, theme: theme),
-                  listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Escuro com contraste médio", textStyle: list, isChecked: _themeOptions["Escuro1"]!, onChanged: (bool? value)=> {_onOptionChanged("Escuro1", value)}, theme: theme),
-                  listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Escuro com contraste alto", textStyle: list, isChecked: _themeOptions["Escuro2"]!, onChanged: (bool? value)=> {_onOptionChanged("Escuro2", value)}, theme: theme),
+                  _buildThemeOption(context: context, text: "Escuro com contraste alto", textStyle: list, isChecked: _themeOptions["dark_high_contrast"]!, 
+                  onChanged: (bool? value)=> {_onOptionChanged("dark_high_contrast", value), themeNotifier.setTheme(ThemeMode.dark, highContrast: true)}, theme: theme),
                   listDivider(theme: theme),
                 ],
               ),
@@ -150,7 +186,7 @@ Widget _buildThemeOption({
         value: isChecked,
         onChanged: onChanged,
       ),
-      onTap: (){onChanged(!isChecked);}
+      onTap: (){onChanged(true);}
     );
   }
 }
