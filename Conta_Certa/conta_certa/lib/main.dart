@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/opening_screen.dart';
-import 'screens/main_screen.dart';
-import 'screens/settings.dart';
+
 import 'theme/theme.dart';
 import 'theme/util.dart';
 

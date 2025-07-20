@@ -1,6 +1,9 @@
 import 'package:conta_certa/screens/settings.dart';
+import 'package:conta_certa/widgets/buttons.dart';
+import 'package:conta_certa/widgets/slide_up_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:conta_certa/widgets/text_field.dart';
 
 class EventsState extends ChangeNotifier {
 
@@ -26,19 +29,19 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: theme.colorScheme.surface,
         automaticallyImplyLeading: false,
         title: Row(
-          children: [
-            Expanded(
-              child: Image.asset(
+          children: [ Image.asset(
                 'assets/images/conta_certa_logo.png',
                 width: 60,
                 height: 60,
                 ),
-            ),
+            
             SizedBox(width: 5,),
-            Text(
-              'Seus eventos',
-              style: textTheme.headlineMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
+            Expanded(
+              child: Text(
+                'Seus eventos',
+                style: textTheme.headlineMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ),
           ],
@@ -65,7 +68,21 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          showModalBottomSheet(
+            context: context, 
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+            builder: (BuildContext context){
+              return Padding(padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: AddProductContainer(theme: theme, textTheme: textTheme),
+              );
+            }
+          );
+        },
         backgroundColor: theme.colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: theme.colorScheme.onPrimary,),
       ),
@@ -81,4 +98,36 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+}
+
+Widget AddProductContainer({
+  required ThemeData theme,
+  required TextTheme textTheme,
+}){
+    return SlideUpContainer(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        color: theme.colorScheme.secondaryContainer,
+        margin: EdgeInsets.only(),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            spacing: 15,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Adicionando evento',
+                textAlign: TextAlign.left,
+                style: textTheme.headlineSmall?.copyWith(
+                  color: theme.colorScheme.onSecondaryContainer,
+                )
+              ),
+              TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Nome do evento(obrigatório)", icon: Icons.edit),
+              TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Descrição do evento", icon: Icons.segment),
+              ButtonDesign(theme: theme, textTheme: textTheme, childText: "Criar")
+            ],
+          ),
+        ),
+      )
+    );
 }
