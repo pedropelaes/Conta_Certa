@@ -1,4 +1,5 @@
 import 'package:conta_certa/screens/main_screen.dart';
+import 'package:conta_certa/screens/people_screen.dart';
 import 'package:conta_certa/theme/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -44,6 +45,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider<ThemeNotifier>.value(value: themeNotifier),
         ChangeNotifierProvider<EventsState>(create: (_) => EventsState()),
+        ChangeNotifierProvider<PeopleState>(create: (_) => PeopleState()),
       ],
       child: DevicePreview(
         enabled: kIsWeb || (!Platform.isAndroid && !Platform.isIOS),

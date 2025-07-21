@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class SlideUpContainer extends StatefulWidget{
-  final Widget child;
+  final List<Widget> content;
   final Duration animationDuration;
   final Curve animationCurve;
+  final ThemeData theme;
 
   const SlideUpContainer({
-    Key? key,
-    required this.child,
+    super.key,
+    required this.content,
+    required this.theme,
     this.animationDuration = const Duration(milliseconds: 300),
     this.animationCurve = Curves.easeOutCubic,
-  }) : super(key: key);
+  });
 
   @override
   State<SlideUpContainer> createState() => _SlideUpContainerState();
@@ -44,7 +46,19 @@ class _SlideUpContainerState extends State<SlideUpContainer> with SingleTickerPr
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _slideAnimation,
-      child: widget.child,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        color: widget.theme.colorScheme.secondaryContainer,
+        margin: EdgeInsets.only(),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            spacing: 15,
+            mainAxisSize: MainAxisSize.min,
+            children: widget.content,
+          ),
+        ),
+      ),
     );
   }
 }

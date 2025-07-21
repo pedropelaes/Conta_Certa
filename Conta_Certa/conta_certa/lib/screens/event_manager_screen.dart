@@ -14,6 +14,13 @@ class EventManagerScreen extends StatefulWidget {
 }
 
 class _EventManagerScreenState extends State<EventManagerScreen> {
+  final TextEditingController nameController = TextEditingController();
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
   int _currentIndex = 0;
   late List<Widget> _pages;
 
@@ -65,12 +72,54 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.attach_money_rounded), label: "Financeiro")
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: theme.colorScheme.primary,
-        child: Icon(Icons.add, size: 30, color: theme.colorScheme.onPrimary,),
-      ),
+      floatingActionButton: getFloatingActionButton(_currentIndex)
     );
   }
   
+  Widget? getFloatingActionButton(int index){
+    switch (index){
+      case 0:
+        return FloatingActionButton(
+        onPressed: (){
+          showAddPerson(context, nameController, widget.event);
+        },
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
+      );
+      case 1:
+        return FloatingActionButton(
+        onPressed: (){
+          
+        },
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
+      );
+      case 2:
+        return FloatingActionButton(
+        onPressed: (){
+          
+        },
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
+      );
+      default:
+        return null;
+    }
+  }
+}
+
+void showAddPerson(BuildContext context, TextEditingController nameController, Event event){
+  showModalBottomSheet(
+    context: context, 
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+    builder: (BuildContext context){
+      return Padding(padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: AddPersonContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, event: event),
+      );
+    }
+  );
 }

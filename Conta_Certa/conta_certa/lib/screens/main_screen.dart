@@ -184,39 +184,28 @@ Widget AddProductContainer({
   required TextEditingController descriptionController,
 }){
     return SlideUpContainer(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        color: theme.colorScheme.secondaryContainer,
-        margin: EdgeInsets.only(),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            spacing: 15,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Adicionando evento',
-                textAlign: TextAlign.left,
-                style: textTheme.headlineSmall?.copyWith(
-                  color: theme.colorScheme.onSecondaryContainer,
-                )
-              ),
-              TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Nome do evento(obrigatório)", icon: Icons.edit, controller: nameController),
-              TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Descrição do evento", icon: Icons.segment, controller: descriptionController),
-              ButtonDesign(
-                onPressed: (){
-                  final navigator = Navigator.of(context);
-                  final eventsState = Provider.of<EventsState>(context, listen: false);
-                  eventsState.addEvent(nameController.text, descriptionController.text);
-                  nameController.clear();
-                  descriptionController.clear();
-                  navigator.pop();
-                },
-                theme: theme, textTheme: textTheme, childText: "Criar"
-              ),
-            ],
-          ),
+      theme: theme,
+      content: [
+        Text(
+          'Adicionando evento',
+          textAlign: TextAlign.left,
+          style: textTheme.headlineSmall?.copyWith(
+            color: theme.colorScheme.onSecondaryContainer,
+          )
         ),
-      )
+        TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Nome do evento(obrigatório)", icon: Icons.edit, controller: nameController),
+        TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Descrição do evento", icon: Icons.segment, controller: descriptionController),
+        ButtonDesign(
+          onPressed: (){
+            final navigator = Navigator.of(context);
+            final eventsState = Provider.of<EventsState>(context, listen: false);
+            eventsState.addEvent(nameController.text, descriptionController.text);
+            nameController.clear();
+            descriptionController.clear();
+            navigator.pop();
+          },
+          theme: theme, textTheme: textTheme, childText: "Criar"
+        ),
+      ]
     );
 }
