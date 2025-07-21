@@ -1,3 +1,4 @@
+import 'package:conta_certa/screens/event_manager_screen.dart';
 import 'package:conta_certa/screens/settings.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
@@ -164,7 +165,7 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                   onOpenEvent: () {
-                    print('Abrindo: ${event.title}');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventManagerScreen(eventTitle: event.title)));
                   },
                 );
               })
