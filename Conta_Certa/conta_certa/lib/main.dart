@@ -16,6 +16,7 @@ import 'theme/util.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
+  final isFirstLaunch = prefs.getBool("first_launch") ?? true;
   final savedTheme = prefs.getString('selected_theme') ?? 'system';
 
   // Inicializa com o tema salvo
@@ -46,14 +47,16 @@ void main() async {
       ],
       child: DevicePreview(
         enabled: kIsWeb || (!Platform.isAndroid && !Platform.isIOS),
-        builder: (context) => const MainApp(),
+        builder: (context) => MainApp(isFirstLaunch: isFirstLaunch),
       ),
     ),
   );
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final bool isFirstLaunch;
+
+  const MainApp({super.key, required this.isFirstLaunch});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,7 @@ class MainApp extends StatelessWidget {
       darkTheme: isHighContrast ? darkScheme.darkHighContrast() : darkScheme.dark(),
         themeMode: themeNotifier.themeMode, // Usa o tema do sistema (claro/escuro)
       ),
-      home: OpeningScreen(),
+      home: isFirstLaunch ? OpeningScreen() : MainScreen(),
     );
   }
 }

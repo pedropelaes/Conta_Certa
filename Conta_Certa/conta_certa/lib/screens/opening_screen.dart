@@ -1,10 +1,16 @@
 import 'package:conta_certa/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OpeningScreen extends StatelessWidget {
   const OpeningScreen({super.key});
   
+  Future<void> _openMainScreen(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('first_launch', false);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MainScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +47,7 @@ class OpeningScreen extends StatelessWidget {
                 Spacer(flex: 2,),
                 PlatformElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
+                    _openMainScreen(context);
                   },
                   color: theme.colorScheme.primaryContainer,
                   child: Text("Começar", style: textTheme.bodyLarge?.copyWith(
