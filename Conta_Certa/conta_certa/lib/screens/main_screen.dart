@@ -165,7 +165,7 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                   onOpenEvent: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventManagerScreen(eventTitle: event.title)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventManagerScreen(event: event)));
                   },
                 );
               })

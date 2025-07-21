@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-Widget EventCard({
+Widget BaseCard({
   required ThemeData theme,
   required TextTheme textTheme,
-  required String title,
-  required String description,
-  required VoidCallback onOpenEvent,
-  required VoidCallback onDelete,
+  required VoidCallback onOpen,
+  required List<Widget> content,
 }){
-  return Padding(
+  return  Padding(
     padding: const EdgeInsets.only(top: 10.0, left: 12, right: 12, bottom: 5),
     child: InkWell(
-      onTap: onOpenEvent,
+      onTap: onOpen,
       borderRadius: BorderRadius.circular(25),
       child: Card(
         color: theme.colorScheme.primaryContainer,
@@ -22,38 +20,115 @@ Widget EventCard({
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                spacing: 10,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: textTheme.headlineLarge?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer,
-                      ),
-                      maxLines: 1,
-                    ),
-                  ),
-                  PlatformIconButton(
-                    onPressed: onDelete,
-                    icon: Icon(Icons.delete, color: Colors.red, size: 36,),
-                  )
-                ],
-              ),
-              Text(
-                description,
-                textAlign: TextAlign.start,
-                style: textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onPrimaryContainer
-                ),
-                maxLines: 5,
-              )
-            ],
+            children: content,
           ),
         ),
       ),
     ),
+  );
+}
+
+Widget EventCard({
+  required ThemeData theme,
+  required TextTheme textTheme,
+  required String title,
+  required String description,
+  required VoidCallback onOpenEvent,
+  required VoidCallback onDelete,
+}){
+  return BaseCard(
+      theme: theme,
+      textTheme: textTheme,
+      onOpen: onOpenEvent,
+      content: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 10,
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: textTheme.headlineLarge?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
+                maxLines: 1,
+              ),
+            ),
+            PlatformIconButton(
+              onPressed: onDelete,
+              icon: Icon(Icons.delete, color: Colors.red, size: 36,),
+            )
+          ],
+        ),
+        Text(
+          description,
+          textAlign: TextAlign.start,
+          style: textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.onPrimaryContainer
+          ),
+          maxLines: 5,
+        )
+      ]
+    );
+}
+
+Widget PersonCard({
+  required ThemeData theme,
+  required TextTheme textTheme,
+  required String name,
+  required VoidCallback onDelete,
+  required VoidCallback onEdit,
+  required VoidCallback onAdd
+}){
+  return BaseCard(
+    theme: theme, 
+    textTheme: textTheme, 
+    onOpen: onAdd, 
+    content: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Row(
+                  spacing: 5,
+                  children: [
+                    Icon(Icons.account_circle_rounded, color: theme.colorScheme.onPrimaryContainer, size: 30,),
+                    Text(
+                      name,
+                      style: textTheme.titleLarge?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PlatformIconButton(
+                    onPressed: onDelete,
+                    icon: Icon(Icons.delete, color: Colors.red, size: 40,),
+                  ),
+                  PlatformIconButton(
+                    onPressed: onEdit,
+                    icon: Icon(Icons.edit_outlined, color: theme.colorScheme.onPrimaryContainer, size: 36,),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Spacer(),
+          PlatformIconButton(
+            onPressed: onAdd,
+            icon: Icon(Icons.add_circle_outline, color: theme.colorScheme.onPrimaryContainer, size: 44,),
+          )
+        ],
+      ),
+      
+    ]
   );
 }
