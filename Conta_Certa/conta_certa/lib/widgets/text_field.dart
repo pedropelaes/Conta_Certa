@@ -5,7 +5,8 @@ Widget TextFieldDesign({
   required ThemeData theme,
   required TextTheme textTheme,
   required String hintText,
-  required IconData icon
+  required IconData icon,
+  required TextEditingController controller,
 }){
 return TextField(
     decoration: InputDecoration(
@@ -19,5 +20,6 @@ return TextField(
     style: textTheme.bodyLarge?.copyWith(
       color: theme.colorScheme.onSecondaryContainer
     ),
+    controller: controller,
   );
 }

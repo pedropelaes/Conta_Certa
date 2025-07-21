@@ -5,10 +5,10 @@ Widget ButtonDesign({
   required ThemeData theme,
   required TextTheme textTheme,
   required String childText,
-  required 
+  required VoidCallback onPressed
 }){
   return PlatformElevatedButton(
-    onPressed: () {},
+    onPressed: onPressed,
     color: theme.colorScheme.onSecondaryContainer,
     child: Text(
       childText,
