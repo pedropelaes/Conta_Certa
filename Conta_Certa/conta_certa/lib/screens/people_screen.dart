@@ -1,5 +1,6 @@
 import 'package:conta_certa/models/event.dart';
 import 'package:conta_certa/models/people.dart';
+import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
 import 'package:conta_certa/widgets/dialogs.dart';
@@ -11,67 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PeopleState extends ChangeNotifier{
-  final Event event;
-
-  PeopleState(this.event){
-    _loadEventFromStorage();
-  }
-
-  List<Pessoa> get pessoas => List.unmodifiable(event.people);
-
-  void addPessoa (String nome){
-    event.people.add(Pessoa(nome: nome));
-    saveEventToStorage();
-    notifyListeners();
-  }
-
-  void editPessoa(int index, String newName){
-    event.people[index].nome = newName;
-    saveEventToStorage();
-    notifyListeners();
-    Fluttertoast.showToast(
-      msg: "Pessoa atualizada.",
-    );
-  }
-
-  void deletePessoa (int index){
-    event.people.removeAt(index);
-    saveEventToStorage();
-    notifyListeners();
-    Fluttertoast.showToast(
-      msg: "Pessoa deletada.",
-    );
-  }
-  
-  void saveEventToStorage() async{
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(event.title, event.toJson());
-  }
-
-  Future<void> _loadEventFromStorage() async{
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString(event.title);
-
-    if(jsonString != null){
-      try{
-        Event loadedEvent = Event.fromJson(jsonString);
-        event.people
-          ..clear()
-          ..addAll(loadedEvent.people);
-        notifyListeners();
-      } catch (e){
-        Fluttertoast.showToast(msg: "Erro: $e");
-        print("Erro ao carregar evento: $e");
-      }
-    }
-  }
-}
-
-class PeopleScreen extends StatefulWidget {
-  final Event event;
-  
-  const PeopleScreen({super.key, required this.event});
+class PeopleScreen extends StatefulWidget {  
+  const PeopleScreen({super.key});
 
   @override
   State<PeopleScreen> createState() => _PeopleScreenState();
@@ -83,10 +25,12 @@ class _PeopleScreenState extends State<PeopleScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
-    return Consumer<PeopleState>(
-      builder: (context, peopleState, _) {
+    return Consumer<EventsState>(
+      builder: (context, eventsState, _) {
+        final event = eventsState.selectedEvent!;
+        final pessoas = event.people;
         // Proper sliver implementation
-        if (peopleState.pessoas.isEmpty) {
+        if (pessoas.isEmpty) {
           return SliverToBoxAdapter(
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
@@ -100,7 +44,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              final person = peopleState.pessoas[index];
+              final person = pessoas[index];
               return PersonCard(
                 theme: theme,
                 textTheme: textTheme,
@@ -112,14 +56,14 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         theme: theme, textTheme: textTheme, title: 'Deseja mesmo apagar ${person.nome} ?', 
                         body: 'Não há reversão para essa ação. Todas as informações relacionadas a essa pessoa serão perdidas', 
                         confirm: 'Apagar', 
-                        onConfirm: (){peopleState.deletePessoa(index);}, 
+                        onConfirm: (){eventsState.deletePessoa(index);}, 
                         context: context
                       )
                     );
                 },
-                onEdit: () => showEditPerson(context, widget.event, index, peopleState),
+                onEdit: () => showEditPerson(context, event, index, eventsState),
                 onAdd: () {
-                  if(peopleState.event.produtos.isEmpty){
+                  if(pessoas.isEmpty){
                     showPlatformDialog(
                       context: context,
                       builder: (_) => dialogDesign(
@@ -135,14 +79,14 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   }else{
                     showModalBottomSheet(
                       context: context, 
-                      builder: (_) => AddConsumedProductContainer(theme: theme, textTheme: textTheme, context: context, peopleState: peopleState)
+                      builder: (_) => AddConsumedProductContainer(theme: theme, textTheme: textTheme, context: context, eventsState: eventsState)
                     );
                   }
                 },
                 context: context
               );
             },
-            childCount: peopleState.pessoas.length,
+            childCount: pessoas.length,
           ),
         );
       },
@@ -154,8 +98,7 @@ Widget AddPersonContainer({
   required TextTheme textTheme,
   required BuildContext context,
   required TextEditingController nameController,
-  required Event event,
-  required PeopleState peopleState
+  required EventsState eventsState
 }){
   return SlideUpContainer(
     content: [
@@ -167,10 +110,15 @@ Widget AddPersonContainer({
       ),
       TextFieldDesign(theme: theme, textTheme: textTheme, hintText: 'Nome da pessoa', icon: Icons.account_circle_outlined, controller: nameController),
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Adicionar', onPressed: (){
-        final navigator = Navigator.of(context);
-        peopleState.addPessoa(nameController.text);
-        nameController.clear();
-        navigator.pop();
+        if(nameController.text == ""){
+          Fluttertoast.showToast(msg: "Por favor, preencha o campo do nome da pessoa.");
+        }
+        else{
+          final navigator = Navigator.of(context);
+          eventsState.addPessoa(nameController.text);
+          nameController.clear();
+          navigator.pop();
+        }
       }),
     ], 
     theme: theme
@@ -184,7 +132,7 @@ Widget EditPersonContainer({
   required TextEditingController nameController,
   required Event event,
   required int index,
-  required PeopleState peopleState
+  required EventsState eventsState
 }){
   return SlideUpContainer(
     content: [
@@ -197,7 +145,7 @@ Widget EditPersonContainer({
       TextFieldDesign(theme: theme, textTheme: textTheme, hintText: 'Novo nome', icon: Icons.account_circle_outlined, controller: nameController),
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Salvar', onPressed: (){
         final navigator = Navigator.of(context);
-        peopleState.editPessoa(index, nameController.text);
+        eventsState.editPessoa(index, nameController.text);
         nameController.clear();
         navigator.pop();
       }),
@@ -206,7 +154,7 @@ Widget EditPersonContainer({
   );
 }
 
-void showEditPerson(BuildContext context, Event event, int index, PeopleState peopleState){
+void showEditPerson(BuildContext context, Event event, int index, EventsState eventsState){
   final TextEditingController editingController = TextEditingController();
   editingController.text = event.people[index].nome;
   showModalBottomSheet(
@@ -218,7 +166,7 @@ void showEditPerson(BuildContext context, Event event, int index, PeopleState pe
       return Padding(padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: EditPersonContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: editingController, event: event, index: index, peopleState: peopleState),
+      child: EditPersonContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: editingController, event: event, index: index, eventsState: eventsState),
       );
     }
   );
@@ -228,7 +176,7 @@ Widget AddConsumedProductContainer({
   required ThemeData theme,
   required TextTheme textTheme,
   required BuildContext context,
-  required PeopleState peopleState,
+  required EventsState eventsState,
 }){
   final navigator = Navigator.of(context);
   return SlideUpContainer(
@@ -243,7 +191,7 @@ Widget AddConsumedProductContainer({
         height: MediaQuery.of(context).size.height * 0.4, // altura limitada
         child: ListView(
           children: [
-            ...peopleState.event.compradores.asMap().entries.map((entry) {
+            ...eventsState.selectedEvent!.compradores.asMap().entries.map((entry) {
               final index = entry.key;
               final product = entry.value;
               return ListTile(

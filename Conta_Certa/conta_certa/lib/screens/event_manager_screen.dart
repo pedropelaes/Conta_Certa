@@ -1,4 +1,5 @@
 import 'package:conta_certa/models/event.dart';
+import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/screens/people_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -6,9 +7,8 @@ import 'package:conta_certa/widgets/appbars.dart';
 import 'package:provider/provider.dart';
 
 class EventManagerScreen extends StatefulWidget {
-  final Event event;
 
-  const EventManagerScreen({super.key, required this.event});
+  const EventManagerScreen({super.key});
 
   @override
   State<EventManagerScreen> createState() => _EventManagerScreenState();
@@ -25,13 +25,16 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
   int _currentIndex = 0;
   late List<Widget> _pages;
 
-  late PeopleState peopleState;
+  late Event event;
+  late EventsState eventsState;
   @override
   void initState() {
     super.initState();
-    peopleState = PeopleState(widget.event);
+    eventsState = Provider.of<EventsState>(context, listen: false);
+    event = eventsState.selectedEvent!;
+
     _pages = [
-      PeopleScreen(event: widget.event),
+      PeopleScreen(),
       SliverToBoxAdapter(child: Center(child: Text('Produtos'))),
       SliverToBoxAdapter(child: Center(child: Text('Financeiro'))),
     ];
@@ -42,12 +45,12 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
-    return ChangeNotifierProvider<PeopleState>.value(
-      value: peopleState,
+    return ChangeNotifierProvider<EventsState>.value(
+      value: eventsState,
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            MediumAppBar(theme: theme, textTheme: textTheme, title: widget.event.title, onSearch: () {}, ),
+            MediumAppBar(theme: theme, textTheme: textTheme, title: event.title, onSearch: () {}, ),
             SliverToBoxAdapter(
               child: 
                 Divider(
@@ -75,17 +78,17 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
             BottomNavigationBarItem(icon: Icon(Icons.attach_money_rounded), label: "Financeiro")
           ],
         ),
-        floatingActionButton: getFloatingActionButton(_currentIndex)
+        floatingActionButton: getFloatingActionButton(_currentIndex, event)
       ),
     );
   }
   
-  Widget? getFloatingActionButton(int index){
+  Widget? getFloatingActionButton(int index, Event event){
     switch (index){
       case 0:
         return FloatingActionButton(
         onPressed: (){
-          showAddPerson(context, nameController, widget.event, peopleState);
+          showAddPerson(context, nameController, event, eventsState);
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
@@ -112,7 +115,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
   }
 }
 
-void showAddPerson(BuildContext context, TextEditingController nameController, Event event, PeopleState peopleState){
+void showAddPerson(BuildContext context, TextEditingController nameController, Event event, EventsState eventsState){
   
   showModalBottomSheet(
     context: context, 
@@ -123,7 +126,7 @@ void showAddPerson(BuildContext context, TextEditingController nameController, E
       return Padding(padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: AddPersonContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, event: event, peopleState: peopleState),
+      child: AddPersonContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, eventsState: eventsState),
       );
     }
   );

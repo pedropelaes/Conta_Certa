@@ -1,3 +1,4 @@
+import 'package:conta_certa/models/people.dart';
 import 'package:conta_certa/screens/event_manager_screen.dart';
 import 'package:conta_certa/screens/settings.dart';
 import 'package:conta_certa/widgets/buttons.dart';
@@ -16,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class EventsState extends ChangeNotifier {
   final List<Event> _events = [];
   List<Event> get events => List.unmodifiable(_events);
+  Event? _selectedEvent;
+  Event? get selectedEvent => _selectedEvent;
 
   EventsState(){
     loadEvents();
@@ -42,6 +45,8 @@ class EventsState extends ChangeNotifier {
   }
 
   void deleteEvent(int index) async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_events[index].title); // remove os dados do evento
     _events.removeAt(index);
     await _saveEvents();
     Fluttertoast.showToast(
@@ -50,6 +55,51 @@ class EventsState extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Pessoa> get pessoas => List.unmodifiable(_selectedEvent!.people);
+
+  void addPessoa (String nome){
+    _selectedEvent!.people.add(Pessoa(nome: nome));
+    saveSelectedEventToStorage();
+    Fluttertoast.showToast(
+      msg: "Pessoa adicionada.",
+    );
+    notifyListeners();
+  }
+
+  void editPessoa(int index, String newName){
+    _selectedEvent!.people[index].nome = newName;
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(
+      msg: "Pessoa atualizada.",
+    );
+  }
+
+  void deletePessoa (int index){
+    _selectedEvent!.people.removeAt(index);
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(
+      msg: "Pessoa deletada.",
+    );
+  }
+  
+  void saveSelectedEventToStorage() async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_selectedEvent!.title, _selectedEvent!.toJson());
+  }
+
+  Future<void> selectEventByTitle(String title) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString(title);
+    if (jsonString != null) {
+      _selectedEvent = Event.fromJson(jsonString);
+    } else {
+      // fallback: pegar da lista em memória
+      _selectedEvent = _events.firstWhere((e) => e.title == title);
+    }
+    notifyListeners();
+  }
 }
 
 class MainScreen extends StatefulWidget{
@@ -136,8 +186,17 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: theme.colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: theme.colorScheme.onPrimary,),
       ),
-      body: Consumer<EventsState>(
+      body: 
+      Consumer<EventsState>(
         builder: (context, eventsState, _) {
+          if (eventsState.events.isEmpty){
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Center(
+                child: Text("Você ainda não adicionou nenhum evento, eles aparecerão aqui.", style: textTheme.bodyLarge, textAlign: TextAlign.center,),
+              ),
+            );
+          }
           return ListView(
             children: [
               Divider(
@@ -165,7 +224,8 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                   onOpenEvent: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventManagerScreen(event: event)));
+                    Provider.of<EventsState>(context, listen: false).selectEventByTitle(event.title);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventManagerScreen()));
                   },
                 );
               })
@@ -197,12 +257,17 @@ Widget AddProductContainer({
         TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Descrição do evento", icon: Icons.segment, controller: descriptionController),
         ButtonDesign(
           onPressed: (){
-            final navigator = Navigator.of(context);
-            final eventsState = Provider.of<EventsState>(context, listen: false);
-            eventsState.addEvent(nameController.text, descriptionController.text);
-            nameController.clear();
-            descriptionController.clear();
-            navigator.pop();
+            if(nameController.text == ""){
+              Fluttertoast.showToast(msg: "O nome do evento é um campo obrigatório.");
+            }
+            else{
+              final navigator = Navigator.of(context);
+              final eventsState = Provider.of<EventsState>(context, listen: false);
+              eventsState.addEvent(nameController.text, descriptionController.text);
+              nameController.clear();
+              descriptionController.clear();
+              navigator.pop();
+            }
           },
           theme: theme, textTheme: textTheme, childText: "Criar"
         ),
