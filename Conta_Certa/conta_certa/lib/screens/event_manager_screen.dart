@@ -1,6 +1,7 @@
 import 'package:conta_certa/models/event.dart';
 import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/screens/people_screen.dart';
+import 'package:conta_certa/screens/products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:conta_certa/widgets/appbars.dart';
@@ -16,9 +17,13 @@ class EventManagerScreen extends StatefulWidget {
 
 class _EventManagerScreenState extends State<EventManagerScreen> {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController productNameController = TextEditingController();
+  final TextEditingController productValueController = TextEditingController();
   @override
   void dispose() {
     nameController.dispose();
+    productNameController.dispose();
+    productValueController.dispose();
     super.dispose();
   }
 
@@ -35,7 +40,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
 
     _pages = [
       PeopleScreen(),
-      SliverToBoxAdapter(child: Center(child: Text('Produtos'))),
+      ProductsScreen(),
       SliverToBoxAdapter(child: Center(child: Text('Financeiro'))),
     ];
   }
@@ -88,7 +93,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
       case 0:
         return FloatingActionButton(
         onPressed: (){
-          showAddPerson(context, nameController, event, eventsState);
+          showAddPerson(context, nameController, eventsState);
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
@@ -96,7 +101,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
       case 1:
         return FloatingActionButton(
         onPressed: (){
-          
+          showAddProduct(context, productNameController, productValueController, eventsState);
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
@@ -115,7 +120,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
   }
 }
 
-void showAddPerson(BuildContext context, TextEditingController nameController, Event event, EventsState eventsState){
+void showAddPerson(BuildContext context, TextEditingController nameController, EventsState eventsState){
   
   showModalBottomSheet(
     context: context, 
@@ -127,6 +132,22 @@ void showAddPerson(BuildContext context, TextEditingController nameController, E
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: AddPersonContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, eventsState: eventsState),
+      );
+    }
+  );
+}
+
+void showAddProduct(BuildContext context, TextEditingController nameController, TextEditingController productValueController,EventsState eventsState){
+  showModalBottomSheet(
+    context: context, 
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+    builder: (BuildContext context){
+      return Padding(padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: AddProductContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, valueController: productValueController, eventsState: eventsState),
       );
     }
   );

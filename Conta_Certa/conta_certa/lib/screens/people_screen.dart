@@ -4,6 +4,7 @@ import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
 import 'package:conta_certa/widgets/dialogs.dart';
+import 'package:conta_certa/widgets/product_list_option.dart';
 import 'package:conta_certa/widgets/slide_up_container.dart';
 import 'package:conta_certa/widgets/text_field.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,9 @@ class _PeopleScreenState extends State<PeopleScreen> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
               child: Center(
-                child: Text("Você ainda não adicionou nenhuma pessoa, elas aparecerão aqui.", style: textTheme.bodyLarge, textAlign: TextAlign.center,),
+                child: Text("Você ainda não adicionou nenhuma pessoa, elas aparecerão aqui.", style: textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold
+                ), textAlign: TextAlign.center,),
               ),
             ),
           );
@@ -194,8 +197,16 @@ Widget AddConsumedProductContainer({
             ...eventsState.selectedEvent!.compradores.asMap().entries.map((entry) {
               final index = entry.key;
               final product = entry.value;
-              return ListTile(
-                title: Text(product.nome),
+              return Column(
+                children: [
+                  /*buildProductOption(theme: theme, textTheme: textTheme, 
+                    context: context, 
+                    isChecked: , 
+                    onChanged: (bool? value) => {}, 
+                    nome: product.nome
+                  ),
+                  listDivider(theme: theme),*/
+                ],
               );
             })
           ],
@@ -204,4 +215,10 @@ Widget AddConsumedProductContainer({
     ],
     theme: theme
   );
+}
+
+Widget listDivider({
+  required ThemeData theme
+}){
+  return Divider(height: 5, thickness: 2, color: theme.colorScheme.onSecondaryContainer,);
 }

@@ -1,4 +1,5 @@
 import 'package:conta_certa/models/people.dart';
+import 'package:conta_certa/models/product.dart';
 import 'package:conta_certa/screens/event_manager_screen.dart';
 import 'package:conta_certa/screens/settings.dart';
 import 'package:conta_certa/widgets/buttons.dart';
@@ -81,6 +82,32 @@ class EventsState extends ChangeNotifier {
     notifyListeners();
     Fluttertoast.showToast(
       msg: "Pessoa deletada.",
+    );
+  }
+
+  void addProduto(String nome, double valor){
+    _selectedEvent!.produtos.add(Produto(nome: nome, valor: valor));
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(msg: 'Produto adicionado');
+  }
+
+  void editProduto(int index, String newName, double newValue){
+    _selectedEvent!.produtos[index].nome = newName;
+    _selectedEvent!.produtos[index].valor = newValue;
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(
+      msg: "Produto atualizado.",
+    );
+  }
+
+  void deleteProduto(int index){
+    _selectedEvent!.produtos.removeAt(index);
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(
+      msg: "Produto deletado.",
     );
   }
   
@@ -178,7 +205,7 @@ class _MainScreenState extends State<MainScreen> {
               return Padding(padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              child: AddProductContainer(theme: theme, textTheme: textTheme, context: context, nameController: nameController, descriptionController: descriptionController),
+              child: AddEventContainer(theme: theme, textTheme: textTheme, context: context, nameController: nameController, descriptionController: descriptionController),
               );
             }
           );
@@ -190,11 +217,21 @@ class _MainScreenState extends State<MainScreen> {
       Consumer<EventsState>(
         builder: (context, eventsState, _) {
           if (eventsState.events.isEmpty){
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: Center(
-                child: Text("Você ainda não adicionou nenhum evento, eles aparecerão aqui.", style: textTheme.bodyLarge, textAlign: TextAlign.center,),
-              ),
+            return Column(
+              children: [
+                Divider(
+                  thickness: 5,
+                  color: theme.colorScheme.secondary,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Center(
+                    child: Text("Você ainda não adicionou nenhum evento, eles aparecerão aqui.", style: textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold
+                ), textAlign: TextAlign.center,),
+                  ),
+                ),
+              ],
             );
           }
           return ListView(
@@ -236,7 +273,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-Widget AddProductContainer({
+Widget AddEventContainer({
   required ThemeData theme,
   required TextTheme textTheme,
   required BuildContext context,

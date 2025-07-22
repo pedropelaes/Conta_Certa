@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -8,7 +9,7 @@ Widget BaseCard({
   required List<Widget> content,
 }){
   return  Padding(
-    padding: const EdgeInsets.only(top: 10.0, left: 12, right: 12, bottom: 5),
+    padding: const EdgeInsets.only(top: 1, left: 12, right: 12, bottom: 1),
     child: InkWell(
       onTap: onOpen,
       borderRadius: BorderRadius.circular(25),
@@ -135,6 +136,63 @@ Widget PersonCard({
         ],
       ),
       
+    ]
+  );
+}
+
+Widget ProductCard ({
+  required BuildContext context,
+  required ThemeData theme,
+  required TextTheme textTheme,
+  required VoidCallback onOpen,
+  required VoidCallback onDelete,
+  required VoidCallback onEdit,
+  required String name,
+  required String value,
+}){
+  return BaseCard(
+    theme: theme, 
+    textTheme: textTheme, 
+    onOpen: onOpen, 
+    content: [
+      Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
+              child: Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.titleLarge?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      Row(
+            mainAxisSize: MainAxisSize.min,
+                children: [
+                  PlatformIconButton(
+                    onPressed: onDelete,
+                    icon: Icon(Icons.delete, color: Colors.red, size: 40,),
+                  ),
+                  PlatformIconButton(
+                    onPressed: onEdit,
+                    icon: Icon(Icons.edit_outlined, color: theme.colorScheme.onPrimaryContainer, size: 36,),
+                  ),
+                  Spacer(),
+                  Text(
+                    'R\$$value',
+                    style: textTheme.displaySmall?.copyWith(
+                      color: theme.colorScheme.onPrimaryContainer,
+                    ),
+                  )
+                ],
+          )
     ]
   );
 }
