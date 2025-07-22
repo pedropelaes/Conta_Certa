@@ -1,13 +1,23 @@
 import 'dart:convert';
 import 'package:conta_certa/models/people.dart';
+import 'package:conta_certa/models/product.dart';
 
 class Event {
   final String title;
   final String description;
-  final List<Pessoa> people;
-  final List<Comprador> compradores;
+  List<Pessoa> people;
+  List<Comprador> compradores;
+  List<Produto> produtos;
 
-  Event({required this.title, required this.description, this.people = const [], this.compradores = const []});
+  Event({
+    required this.title,
+    required this.description,
+    List<Pessoa>? people,
+    List<Comprador>? compradores,
+    List<Produto>? produtos,
+  })  : people = people ?? [],
+        compradores = compradores ?? [],
+        produtos = produtos ?? [];
 
   Map<String, dynamic> toMap(){
     return {
@@ -15,6 +25,7 @@ class Event {
       'description': description,
       'people': people.map((p) => p.toMap()).toList(),
       'compradores': compradores.map((c) => c.toMap()).toList(),
+      'produtos': produtos.map((p) => p.toMap()).toList(),
     };
   }
 
@@ -27,6 +38,9 @@ class Event {
           : [],
       compradores: map['compradores'] != null
           ? List<Comprador>.from(map['compradores'].map((c) => Comprador.fromMap(c)))
+          : [],
+      produtos: map['produtos'] != null
+          ? List<Produto>.from(map['produtos'].map((i) => Produto.fromMap(i)))
           : [],
     );
   }

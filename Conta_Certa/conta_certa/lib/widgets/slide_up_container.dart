@@ -52,10 +52,12 @@ class _SlideUpContainerState extends State<SlideUpContainer> with SingleTickerPr
         margin: EdgeInsets.only(),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            spacing: 15,
-            mainAxisSize: MainAxisSize.min,
-            children: widget.content,
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 15,
+              mainAxisSize: MainAxisSize.min,
+              children: widget.content,
+            ),
           ),
         ),
       ),

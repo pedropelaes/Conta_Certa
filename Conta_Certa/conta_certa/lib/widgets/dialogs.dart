@@ -28,15 +28,17 @@ Widget dialogDesign ({
       backgroundColor: theme.colorScheme.secondaryContainer,
     ),
     actions: [
-      PlatformDialogAction(
-        child: Text(
-          'Cancelar',
-          style: textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSecondaryContainer
+      if(confirm == 'Apagar')
+        PlatformDialogAction(
+          child: Text(
+            'Cancelar',
+            style: textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSecondaryContainer
+            ),
           ),
+          onPressed: () => Navigator.pop(context),
         ),
-        onPressed: () => Navigator.pop(context),
-      ),
+      
       PlatformDialogAction(
         child: Text(
           confirm,

@@ -45,7 +45,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider<ThemeNotifier>.value(value: themeNotifier),
         ChangeNotifierProvider<EventsState>(create: (_) => EventsState()),
-        ChangeNotifierProvider<PeopleState>(create: (_) => PeopleState()),
+        //ChangeNotifierProvider<PeopleState>(create: (_) => PeopleState()),
       ],
       child: DevicePreview(
         enabled: kIsWeb || (!Platform.isAndroid && !Platform.isIOS),

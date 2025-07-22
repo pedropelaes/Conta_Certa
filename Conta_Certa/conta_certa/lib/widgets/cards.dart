@@ -78,7 +78,8 @@ Widget PersonCard({
   required String name,
   required VoidCallback onDelete,
   required VoidCallback onEdit,
-  required VoidCallback onAdd
+  required VoidCallback onAdd,
+  required BuildContext context
 }){
   return BaseCard(
     theme: theme, 
@@ -97,10 +98,15 @@ Widget PersonCard({
                   spacing: 5,
                   children: [
                     Icon(Icons.account_circle_rounded, color: theme.colorScheme.onPrimaryContainer, size: 30,),
-                    Text(
-                      name,
-                      style: textTheme.titleLarge?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer,
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
+                      child: Text(
+                        name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: textTheme.titleLarge?.copyWith(
+                          color: theme.colorScheme.onPrimaryContainer,
+                        ),
                       ),
                     ),
                   ],
