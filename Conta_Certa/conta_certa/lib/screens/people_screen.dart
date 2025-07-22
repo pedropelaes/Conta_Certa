@@ -66,7 +66,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                 },
                 onEdit: () => showEditPerson(context, event, index, eventsState),
                 onAdd: () {
-                  if(pessoas.isEmpty){
+                  if(eventsState.selectedEvent!.produtos.isEmpty){
                     showPlatformDialog(
                       context: context,
                       builder: (_) => dialogDesign(

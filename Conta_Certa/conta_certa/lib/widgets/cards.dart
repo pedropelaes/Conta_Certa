@@ -174,25 +174,30 @@ Widget ProductCard ({
         ],
       ),
       Row(
-            mainAxisSize: MainAxisSize.min,
-                children: [
-                  PlatformIconButton(
-                    onPressed: onDelete,
-                    icon: Icon(Icons.delete, color: Colors.red, size: 40,),
+        mainAxisSize: MainAxisSize.min,
+            children: [
+              PlatformIconButton(
+                onPressed: onDelete,
+                icon: Icon(Icons.delete, color: Colors.red, size: 40,),
+              ),
+              PlatformIconButton(
+                onPressed: onEdit,
+                icon: Icon(Icons.edit_outlined, color: theme.colorScheme.onPrimaryContainer, size: 36,),
+              ),
+              Spacer(),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.5),
+                child: Text(
+                  'R\$$value',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.displaySmall?.copyWith(
+                    color: theme.colorScheme.onPrimaryContainer,
                   ),
-                  PlatformIconButton(
-                    onPressed: onEdit,
-                    icon: Icon(Icons.edit_outlined, color: theme.colorScheme.onPrimaryContainer, size: 36,),
-                  ),
-                  Spacer(),
-                  Text(
-                    'R\$$value',
-                    style: textTheme.displaySmall?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer,
-                    ),
-                  )
-                ],
-          )
+                ),
+              )
+            ],
+      )
     ]
   );
 }
