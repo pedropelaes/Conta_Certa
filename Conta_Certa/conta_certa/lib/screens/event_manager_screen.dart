@@ -1,4 +1,5 @@
 import 'package:conta_certa/models/event.dart';
+import 'package:conta_certa/screens/buyers_screen.dart';
 import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/screens/people_screen.dart';
 import 'package:conta_certa/screens/products_screen.dart';
@@ -19,11 +20,13 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController productNameController = TextEditingController();
   final TextEditingController productValueController = TextEditingController();
+  final TextEditingController buyerNameController = TextEditingController();
   @override
   void dispose() {
     nameController.dispose();
     productNameController.dispose();
     productValueController.dispose();
+    buyerNameController.dispose();
     super.dispose();
   }
 
@@ -41,7 +44,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
     _pages = [
       PeopleScreen(),
       ProductsScreen(),
-      SliverToBoxAdapter(child: Center(child: Text('Financeiro'))),
+      BuyersScreen(),
     ];
   }
 
@@ -49,13 +52,15 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
+    List<String> contents = ["Pessoas", "Produtos", "Compradores"];
+    String title = '${event.title} - ${contents[_currentIndex]}';
 
     return ChangeNotifierProvider<EventsState>.value(
       value: eventsState,
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            MediumAppBar(theme: theme, textTheme: textTheme, title: event.title, onSearch: () {}, ),
+            MediumAppBar(theme: theme, textTheme: textTheme, title: title, onSearch: () {}, ),
             SliverToBoxAdapter(
               child: 
                 Divider(
@@ -109,7 +114,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
       case 2:
         return FloatingActionButton(
         onPressed: (){
-          
+          showAddBuyer(context, nameController, eventsState);
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: Theme.of(context).colorScheme.onPrimary,),
@@ -148,6 +153,23 @@ void showAddProduct(BuildContext context, TextEditingController nameController, 
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: AddProductContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, valueController: productValueController, eventsState: eventsState),
+      );
+    }
+  );
+}
+
+void showAddBuyer(BuildContext context, TextEditingController nameController, EventsState eventsState){
+  showModalBottomSheet(
+    context: context, 
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+    builder: (BuildContext context){
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: AddBuyerContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: nameController, eventsState: eventsState),
       );
     }
   );

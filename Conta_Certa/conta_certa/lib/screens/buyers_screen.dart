@@ -11,16 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PeopleScreen extends StatefulWidget {  
-  const PeopleScreen({super.key});
-
-  @override
-  State<PeopleScreen> createState() => _PeopleScreenState();
-}
-
-class _PeopleScreenState extends State<PeopleScreen> {
+class BuyersScreen extends StatelessWidget{
+  const BuyersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,43 +22,44 @@ class _PeopleScreenState extends State<PeopleScreen> {
     return Consumer<EventsState>(
       builder: (context, eventsState, _) {
         final event = eventsState.selectedEvent!;
-        final pessoas = event.people;
-        // Proper sliver implementation
-        if (pessoas.isEmpty) {
+        final compradores = event.compradores;
+        if(compradores.isEmpty){
           return SliverToBoxAdapter(
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
-              child: Center(
-                child: Text("Você ainda não adicionou nenhuma pessoa, elas aparecerão aqui.", style: textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold
-                ), textAlign: TextAlign.center,),
-              ),
-            ),
+                child: Center(
+                  child: Text("Você ainda não adicionou nenhum comprador, eles aparecerão aqui.", style: textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold
+                  ), textAlign: TextAlign.center,),
+                ),
+            )
           );
         }
 
         return SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final person = pessoas[index];
+            (context, index){
+              final comprador = compradores[index];
               return PersonCard(
-                theme: theme,
-                textTheme: textTheme,
-                name: person.nome ?? "Unnamed",
-                onDelete: () { 
+                isBuyer: true,
+                theme: theme, textTheme: textTheme, 
+                name: comprador.nome, 
+                onDelete: (){
                   showPlatformDialog(
-                      context: context,
-                      builder: (_) => dialogDesign(
-                        theme: theme, textTheme: textTheme, title: 'Deseja mesmo apagar ${person.nome} ?', 
-                        body: 'Não há reversão para essa ação. Todas as informações relacionadas a essa pessoa serão perdidas', 
-                        confirm: 'Apagar', 
-                        onConfirm: (){eventsState.deletePessoa(index);}, 
-                        context: context
-                      )
-                    );
-                },
-                onEdit: () => showEditPerson(context, event, index, eventsState),
-                onAdd: () {
+                    context: context,
+                    builder: (_) => dialogDesign(
+                      theme: theme, textTheme: textTheme, title: 'Deseja mesmo apagar ${comprador.nome} ?', 
+                      body: 'Não há reversão para essa ação. Todas as informações relacionadas a esse comprador serão perdidas', 
+                      confirm: 'Apagar', 
+                      onConfirm: (){eventsState.deleteComprador(index);}, 
+                      context: context
+                    )
+                  );
+                }, 
+                onEdit: (){
+                  showEditBuyer(context, event, index, eventsState);
+                }, 
+                onAdd: (){
                   if(eventsState.selectedEvent!.produtos.isEmpty){
                     showPlatformDialog(
                       context: context,
@@ -73,7 +67,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                         theme: theme,
                         textTheme: textTheme,
                         title: 'Não há produtos criados',
-                        body: 'Para relacionar um produto com uma pessoa, é preciso antes ter criado produtos.',
+                        body: 'Para relacionar um produto com um comprador, é preciso antes ter criado produtos.',
                         confirm: 'Confirmar',
                         onConfirm: () {},
                         context: context,
@@ -82,22 +76,25 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   }else{
                     showModalBottomSheet(
                       context: context, 
-                      builder: (_) => AddConsumedProductContainer(theme: theme, textTheme: textTheme, context: context, eventsState: eventsState, person: person ,indexPessoa: index)
+                      builder: (_) => AddBoughtProductContainer(theme: theme, textTheme: textTheme, context: context, eventsState: eventsState, buyer: comprador, indexComprador: index)
                     );
                   }
                 },
-                onOpen: (){},
+                onOpen: (){
+                  
+                }, 
                 context: context
               );
             },
-            childCount: pessoas.length,
+            childCount: compradores.length,
           ),
         );
-      },
+      }
     );
   }
 }
-Widget AddPersonContainer({
+
+Widget AddBuyerContainer({
   required ThemeData theme,
   required TextTheme textTheme,
   required BuildContext context,
@@ -107,19 +104,19 @@ Widget AddPersonContainer({
   return SlideUpContainer(
     content: [
       Text(
-        'Adicionando pessoa',
+        'Adicionando comprador',
         style: textTheme.headlineSmall?.copyWith(
           color: theme.colorScheme.onSecondaryContainer,
         ),
       ),
-      TextFieldDesign(theme: theme, textTheme: textTheme, hintText: 'Nome da pessoa', icon: Icons.account_circle_outlined, controller: nameController),
+      TextFieldDesign(theme: theme, textTheme: textTheme, hintText: 'Nome do comprador', icon: Icons.account_circle_outlined, controller: nameController),
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Adicionar', onPressed: (){
         if(nameController.text == ""){
-          Fluttertoast.showToast(msg: "Por favor, preencha o campo do nome da pessoa.");
+          Fluttertoast.showToast(msg: "Por favor, preencha o campo do nome do comprador.");
         }
         else{
           final navigator = Navigator.of(context);
-          eventsState.addPessoa(nameController.text);
+          eventsState.addComprador(nameController.text);
           nameController.clear();
           navigator.pop();
         }
@@ -129,7 +126,7 @@ Widget AddPersonContainer({
   );
 }
 
-Widget EditPersonContainer({
+Widget EditBuyerContainer({
   required ThemeData theme,
   required TextTheme textTheme,
   required BuildContext context,
@@ -149,7 +146,7 @@ Widget EditPersonContainer({
       TextFieldDesign(theme: theme, textTheme: textTheme, hintText: 'Novo nome', icon: Icons.account_circle_outlined, controller: nameController),
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Salvar', onPressed: (){
         final navigator = Navigator.of(context);
-        eventsState.editPessoa(index, nameController.text);
+        eventsState.editComprador(index, nameController.text);
         nameController.clear();
         navigator.pop();
       }),
@@ -158,9 +155,9 @@ Widget EditPersonContainer({
   );
 }
 
-void showEditPerson(BuildContext context, Event event, int index, EventsState eventsState){
+void showEditBuyer(BuildContext context, Event event, int index, EventsState eventsState){
   final TextEditingController editingController = TextEditingController();
-  editingController.text = event.people[index].nome;
+  editingController.text = event.compradores[index].nome;
   showModalBottomSheet(
     context: context, 
     isScrollControlled: true,
@@ -170,25 +167,25 @@ void showEditPerson(BuildContext context, Event event, int index, EventsState ev
       return Padding(padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: EditPersonContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: editingController,
-      index: index, eventsState: eventsState, oldName: event.people[index].nome),
+      child: EditBuyerContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, 
+      nameController: editingController, index: index, eventsState: eventsState, oldName: event.compradores[index].nome),
       );
     }
   );
 }
 
-Widget AddConsumedProductContainer({
+Widget AddBoughtProductContainer({
   required ThemeData theme,
   required TextTheme textTheme,
   required BuildContext context,
   required EventsState eventsState,
-  required Pessoa person,
-  required int indexPessoa,
+  required Comprador buyer,
+  required int indexComprador,
 }){
   return SlideUpContainer(
     content: [
       Text(
-        'Adicionar produto consumido por ${person.nome}',
+        'Adicionar produto comprado por ${buyer.nome}',
         style: textTheme.headlineSmall?.copyWith(
           color: theme.colorScheme.onSecondaryContainer,
         ),
@@ -197,13 +194,13 @@ Widget AddConsumedProductContainer({
         height: MediaQuery.of(context).size.height * 0.4,
         child: Consumer<EventsState>(
           builder: (context, eventsState, _) {
-            final pessoa = eventsState.selectedEvent!.people[indexPessoa];
+            final buyer = eventsState.selectedEvent!.compradores[indexComprador];
 
             return ListView(
               children: [
                 ...eventsState.selectedEvent!.produtos.asMap().entries.map((entry) {
                   final product = entry.value;
-                  final isChecked = pessoa.consumidos.contains(product);
+                  final isChecked = buyer.comprados.contains(product);
 
                   return Column(
                     children: [
@@ -213,7 +210,7 @@ Widget AddConsumedProductContainer({
                         context: context,
                         isChecked: isChecked,
                         onChanged: (_) {
-                          eventsState.toggleProdutoConsumido(product, indexPessoa);
+                          eventsState.toggleProdutoComprado(product, indexComprador);
                         },
                         nome: product.nome,
                       ),

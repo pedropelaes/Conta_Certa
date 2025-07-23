@@ -110,6 +110,27 @@ class EventsState extends ChangeNotifier {
       msg: "Produto deletado.",
     );
   }
+
+  void addComprador(String nome){
+    _selectedEvent!.compradores.add(Comprador(nome: nome));
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(msg: "Comprador adicionado");
+  }
+
+  void editComprador(int index, String newName){
+    _selectedEvent!.compradores[index].nome = newName;
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(msg: "Comprador editado");
+  }
+
+  void deleteComprador(int index){
+    _selectedEvent!.compradores.removeAt(index);
+    saveSelectedEventToStorage();
+    notifyListeners();
+    Fluttertoast.showToast(msg: 'Comprador deletado');
+  }
   
   void saveSelectedEventToStorage() async{
     final prefs = await SharedPreferences.getInstance();
@@ -134,6 +155,17 @@ class EventsState extends ChangeNotifier {
       person.consumidos.remove(product);
     }else{
       person.consumidos.add(product);
+    }
+    saveSelectedEventToStorage();
+    notifyListeners();
+  }
+
+  void toggleProdutoComprado(Produto product, int index){
+    final buyer = _selectedEvent!.compradores[index];
+    if(buyer.comprados.contains(product)){
+      buyer.comprados.remove(product);
+    }else{
+      buyer.comprados.add(product);
     }
     saveSelectedEventToStorage();
     notifyListeners();

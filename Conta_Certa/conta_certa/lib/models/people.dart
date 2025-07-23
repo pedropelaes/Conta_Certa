@@ -29,8 +29,8 @@ class Pessoa {
 }
 
 class Comprador {
-  final String nome;
-  final List<Produto> comprados;
+  String nome;
+  List<Produto> comprados;
 
   Comprador({required this.nome, this.comprados = const []});
 

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -80,12 +82,16 @@ Widget PersonCard({
   required VoidCallback onDelete,
   required VoidCallback onEdit,
   required VoidCallback onAdd,
-  required BuildContext context
+  required VoidCallback onOpen,
+  required BuildContext context,
+  bool isBuyer = false,
 }){
+  final icon = isBuyer ? Icons.attach_money_rounded : Icons.account_circle_rounded;
+  final action = isBuyer ? onOpen : onAdd;
   return BaseCard(
     theme: theme, 
     textTheme: textTheme, 
-    onOpen: onAdd, 
+    onOpen: action, 
     content: [
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -98,7 +104,7 @@ Widget PersonCard({
                 child: Row(
                   spacing: 5,
                   children: [
-                    Icon(Icons.account_circle_rounded, color: theme.colorScheme.onPrimaryContainer, size: 30,),
+                    Icon(icon, color: theme.colorScheme.onPrimaryContainer, size: 30,),
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.45),
                       child: Text(
@@ -132,7 +138,9 @@ Widget PersonCard({
           PlatformIconButton(
             onPressed: onAdd,
             icon: Icon(Icons.add_circle_outline, color: theme.colorScheme.onPrimaryContainer, size: 44,),
-          )
+          ),
+          if(isBuyer)
+          Icon(Icons.arrow_right, color: theme.colorScheme.onPrimaryContainer, size: 44,)
         ],
       ),
       
