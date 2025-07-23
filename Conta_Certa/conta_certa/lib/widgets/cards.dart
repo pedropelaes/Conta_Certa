@@ -9,7 +9,7 @@ Widget BaseCard({
   required List<Widget> content,
 }){
   return  Padding(
-    padding: const EdgeInsets.only(top: 1, left: 12, right: 12, bottom: 1),
+    padding: const EdgeInsets.only(top: 5, left: 12, right: 12, bottom: 5),
     child: InkWell(
       onTap: onOpen,
       borderRadius: BorderRadius.circular(25),

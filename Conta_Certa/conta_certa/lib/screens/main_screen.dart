@@ -127,6 +127,17 @@ class EventsState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void toggleProdutoConsumido(Produto product, int index){
+    final person = _selectedEvent!.people[index];
+    if(person.consumidos.contains(product)){
+      person.consumidos.remove(product);
+    }else{
+      person.consumidos.add(product);
+    }
+    saveSelectedEventToStorage();
+    notifyListeners();
+  }
 }
 
 class MainScreen extends StatefulWidget{

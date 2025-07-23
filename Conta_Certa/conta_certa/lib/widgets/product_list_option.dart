@@ -12,17 +12,21 @@ Widget buildProductOption({
 }){
   if(isIOSPlatform(context)){
     return InkWell(
-      onTap: (){onChanged(true);},
+      onTap: (){onChanged(!isChecked);},
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(Icons.shopping_bag_outlined, color: theme.colorScheme.onSecondaryContainer,),
-            Text(
-              nome,
-              style: textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSecondaryContainer
+            Expanded(
+              child: Text(
+                nome,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSecondaryContainer
+                ),
               ),
             ),
             if(isChecked) Icon(Icons.check_rounded, color: theme.colorScheme.onPrimaryContainer),
@@ -34,11 +38,15 @@ Widget buildProductOption({
     return ListTile(
       title: Row(
         children: [
-          Icon(Icons.shopping_bag_outlined, color: theme.colorScheme.onSecondaryContainer,),
-          Text(
-            nome,
-            style: textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSecondaryContainer
+          Icon(Icons.shopping_bag_outlined, color: theme.colorScheme.onSecondaryContainer, size: 30,),
+          Expanded(
+            child: Text(
+              nome,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSecondaryContainer
+              ),
             ),
           ),
         ],
@@ -47,7 +55,7 @@ Widget buildProductOption({
         value: isChecked,
         onChanged: onChanged,
       ),
-      onTap: (){onChanged(true);},
+      onTap: (){onChanged(!isChecked);},
     );
   }
 }

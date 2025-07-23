@@ -82,7 +82,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   }else{
                     showModalBottomSheet(
                       context: context, 
-                      builder: (_) => AddConsumedProductContainer(theme: theme, textTheme: textTheme, context: context, eventsState: eventsState)
+                      builder: (_) => AddConsumedProductContainer(theme: theme, textTheme: textTheme, context: context, eventsState: eventsState, person: person ,indexPessoa: index)
                     );
                   }
                 },
@@ -180,38 +180,50 @@ Widget AddConsumedProductContainer({
   required TextTheme textTheme,
   required BuildContext context,
   required EventsState eventsState,
+  required Pessoa person,
+  required int indexPessoa,
 }){
-  final navigator = Navigator.of(context);
   return SlideUpContainer(
     content: [
       Text(
-        'Adicionar produto consumido',
+        'Adicionar produto consumido por ${person.nome}',
         style: textTheme.headlineSmall?.copyWith(
           color: theme.colorScheme.onSecondaryContainer,
         ),
       ),
       SizedBox(
-        height: MediaQuery.of(context).size.height * 0.4, // altura limitada
-        child: ListView(
-          children: [
-            ...eventsState.selectedEvent!.compradores.asMap().entries.map((entry) {
-              final index = entry.key;
-              final product = entry.value;
-              return Column(
-                children: [
-                  /*buildProductOption(theme: theme, textTheme: textTheme, 
-                    context: context, 
-                    isChecked: , 
-                    onChanged: (bool? value) => {}, 
-                    nome: product.nome
-                  ),
-                  listDivider(theme: theme),*/
-                ],
-              );
-            })
-          ],
+        height: MediaQuery.of(context).size.height * 0.4,
+        child: Consumer<EventsState>(
+          builder: (context, eventsState, _) {
+            final pessoa = eventsState.selectedEvent!.people[indexPessoa];
+
+            return ListView(
+              children: [
+                ...eventsState.selectedEvent!.produtos.asMap().entries.map((entry) {
+                  final product = entry.value;
+                  final isChecked = pessoa.consumidos.contains(product);
+
+                  return Column(
+                    children: [
+                      buildProductOption(
+                        theme: theme,
+                        textTheme: textTheme,
+                        context: context,
+                        isChecked: isChecked,
+                        onChanged: (_) {
+                          eventsState.toggleProdutoConsumido(product, indexPessoa);
+                        },
+                        nome: product.nome,
+                      ),
+                      listDivider(theme: theme),
+                    ],
+                  );
+                }),
+              ],
+            );
+          },
         ),
-      ),
+      )
     ],
     theme: theme
   );
