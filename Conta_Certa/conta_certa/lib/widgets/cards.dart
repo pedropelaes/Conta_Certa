@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'package:conta_certa/screens/people_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -207,5 +206,90 @@ Widget ProductCard ({
             ],
       )
     ]
+  );
+}
+
+Widget ValueCard({
+  required ThemeData theme,
+  required TextTheme textTheme,
+  required BuildContext context,
+  required String title,
+  required String value,
+}){
+  final cardColor = title == 'Valor total:'? theme.colorScheme.tertiaryContainer : theme.colorScheme.primaryContainer; 
+  final textColor = title == 'Valor total:'? theme.colorScheme.onTertiaryContainer: theme.colorScheme.onPrimaryContainer;
+  return Card(
+    color: cardColor,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.37,
+        height: MediaQuery.of(context).size.height * 0.15,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 15,
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.left,
+              style: textTheme.titleLarge?.copyWith(
+                color: textColor,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                value,
+                textAlign: TextAlign.left,
+                style: textTheme.displaySmall?.copyWith(
+                  fontFamily: 'Inter',
+                  color: textColor,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget FinancialListCard({
+  required ThemeData theme,
+  required TextTheme textTheme,
+  required BuildContext context,
+}){
+  return Card(
+    color: theme.colorScheme.secondaryContainer,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    child: Padding(
+      padding: const EdgeInsets.all(15),
+      child: SizedBox(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  'Pessoa',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
+                ),
+                Text(
+                  'Já pagou',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
+                ),
+              ],
+            ),
+            listDivider(theme: theme),
+
+          ],
+        ),
+      ),
+    ),
   );
 }

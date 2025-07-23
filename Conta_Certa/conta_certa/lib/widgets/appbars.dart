@@ -6,6 +6,7 @@ Widget MediumAppBar({
   required TextTheme textTheme,
   required String title,
   required VoidCallback onSearch,
+  bool hasSearch = true
 }){
   return SliverAppBar.medium(
     title: Padding(
@@ -18,6 +19,7 @@ Widget MediumAppBar({
       ),
     ),
     actions: [
+      if(hasSearch)
       PlatformIconButton(
       onPressed: onSearch,
       icon: Icon(

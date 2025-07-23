@@ -4,7 +4,7 @@ import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
 import 'package:conta_certa/widgets/dialogs.dart';
-import 'package:conta_certa/widgets/product_list_option.dart';
+import 'package:conta_certa/widgets/list_widgets/product_list_option.dart';
 import 'package:conta_certa/widgets/slide_up_container.dart';
 import 'package:conta_certa/widgets/text_field.dart';
 import 'package:flutter/material.dart';
