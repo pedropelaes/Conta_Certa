@@ -135,12 +135,13 @@ Widget EditPersonContainer({
   required TextEditingController nameController,
   required Event event,
   required int index,
-  required EventsState eventsState
+  required EventsState eventsState,
+  required String oldName,
 }){
   return SlideUpContainer(
     content: [
       Text(
-        'Editando pessoa',
+        'Editando $oldName',
         style: textTheme.headlineSmall?.copyWith(
           color: theme.colorScheme.onSecondaryContainer,
         ),
@@ -169,7 +170,8 @@ void showEditPerson(BuildContext context, Event event, int index, EventsState ev
       return Padding(padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: EditPersonContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: editingController, event: event, index: index, eventsState: eventsState),
+      child: EditPersonContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: editingController, event: event, 
+      index: index, eventsState: eventsState, oldName: event.people[index].nome),
       );
     }
   );

@@ -10,22 +10,22 @@ Widget dialogDesign ({
   required VoidCallback onConfirm,
   required BuildContext context
 }){
-  final confirmColor = (confirm == 'Apagar') ? theme.colorScheme.error : theme.colorScheme.onSecondaryContainer;
+  final confirmColor = (confirm == 'Apagar') ? theme.colorScheme.error : theme.colorScheme.primary;
   return PlatformAlertDialog(
     title: Text(
       title,
       style: textTheme.headlineLarge?.copyWith(
-        color: theme.colorScheme.onSecondaryContainer,
+        color: theme.colorScheme.onSurface,
       ),
     ),
     content: Text(
       body,
       style: textTheme.bodyLarge?.copyWith(
-        color: theme.colorScheme.onSecondaryContainer
+        color: theme.colorScheme.onSurfaceVariant
       ),
     ),
     material: (_, __) => MaterialAlertDialogData(
-      backgroundColor: theme.colorScheme.secondaryContainer,
+      backgroundColor: theme.colorScheme.surfaceContainerHigh,
     ),
     actions: [
       if(confirm == 'Apagar')
@@ -33,7 +33,7 @@ Widget dialogDesign ({
           child: Text(
             'Cancelar',
             style: textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSecondaryContainer
+              color: theme.colorScheme.primary
             ),
           ),
           onPressed: () => Navigator.pop(context),
