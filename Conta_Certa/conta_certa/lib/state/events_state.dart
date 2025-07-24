@@ -33,6 +33,9 @@ class EventsState extends ChangeNotifier {
     _events.add(Event(title: title, description: description));
     await _saveEvents();
     notifyListeners();
+    Fluttertoast.showToast(
+      msg: 'Evento adicionado.',
+    );
   }
 
   void deleteEvent(int index) async{
@@ -40,10 +43,10 @@ class EventsState extends ChangeNotifier {
     await prefs.remove(_events[index].title); // remove os dados do evento
     _events.removeAt(index);
     await _saveEvents();
+    notifyListeners();
     Fluttertoast.showToast(
       msg: 'Evento deletado.',
     );
-    notifyListeners();
   }
 
   List<Pessoa> get pessoas => List.unmodifiable(_selectedEvent!.people);
@@ -51,10 +54,10 @@ class EventsState extends ChangeNotifier {
   void addPessoa (String nome){
     _selectedEvent!.people.add(Pessoa(nome: nome));
     saveSelectedEventToStorage();
+    notifyListeners();
     Fluttertoast.showToast(
       msg: "Pessoa adicionada.",
     );
-    notifyListeners();
   }
 
   void editPessoa(int index, String newName){

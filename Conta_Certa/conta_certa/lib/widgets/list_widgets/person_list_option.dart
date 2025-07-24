@@ -22,6 +22,7 @@ Widget buildPersonOption({
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
+              spacing: 5,
               children: [
                 Icon(Icons.account_circle_rounded, color: theme.colorScheme.onSecondaryContainer, size: 30,),
                 Expanded(
@@ -60,6 +61,7 @@ Widget buildPersonOption({
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            spacing: 5,
             children: [
               Icon(Icons.account_circle_rounded, color: theme.colorScheme.onSecondaryContainer, size: 30,),
               Expanded(

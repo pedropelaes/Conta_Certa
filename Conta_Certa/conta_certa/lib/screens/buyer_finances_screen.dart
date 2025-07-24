@@ -34,6 +34,7 @@ class _BuyerFinancesScreenState extends State<BuyerFinancesScreen> {
     financialState.getEvent(eventsState.selectedEvent!);
     financialState.getInDebtPeople(widget.buyerIndex);
     final buyer = eventsState.selectedEvent!.compradores[widget.buyerIndex];
+    final totalValue = financialState.calculateTotalValue(widget.buyerIndex);
     return ChangeNotifierProvider<FinancialState>.value(
       value: financialState,
       child: Scaffold(
@@ -53,13 +54,17 @@ class _BuyerFinancesScreenState extends State<BuyerFinancesScreen> {
                     thickness: 5,
                     color: theme.colorScheme.secondary,
                   ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ValueCard(theme: theme, textTheme: textTheme, title: 'Valor total:', value: formatador.format(financialState.calculateTotalValue(widget.buyerIndex)), context: context),
-                  ValueCard(theme: theme, textTheme: textTheme, title: 'A receber:', value: 'R\$999,99', context: context),
-                ],
+              Consumer<FinancialState>(
+                builder: (context, financialState, _){
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ValueCard(theme: theme, textTheme: textTheme, title: 'Valor total:', value: formatador.format(totalValue), context: context),
+                      ValueCard(theme: theme, textTheme: textTheme, title: 'A receber:', value: formatador.format(financialState.calculateToReceiveValue(totalValue, widget.buyerIndex)), context: context),
+                    ],
+                  );
+                },
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
@@ -81,14 +86,17 @@ class _BuyerFinancesScreenState extends State<BuyerFinancesScreen> {
                           children: [
                             ...financialState.inDebt.asMap().entries.map((entry) {
                               final person = entry.value;
+                              final personDebt = financialState.calculatePersonDebt(person, widget.buyerIndex) ;
                               var isChecked = financialState.selectedPeople[person.nome] ?? false;
                               return Column(
                                 children: [
                                   buildPersonOption(theme: theme, textTheme: textTheme, context: context, 
                                   isChecked: isChecked,
-                                  onChanged: (_) {financialState.toggleSelectedPerson(person, widget.buyerIndex);}, 
+                                  onChanged: (_) {
+                                    financialState.toggleSelectedPerson(person, widget.buyerIndex);
+                                  }, 
                                   nome: person.nome, 
-                                  value: formatador.format(financialState.calculatePersonDebt(person, widget.buyerIndex))
+                                  value: formatador.format(personDebt),
                                   ),
                                   listDivider(theme: theme),
                                 ],

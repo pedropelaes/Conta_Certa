@@ -5,7 +5,8 @@ class Pessoa {
   String nome;
   List<Produto> consumidos;
 
-  Pessoa({required this.nome, this.consumidos = const []});
+  Pessoa({required this.nome, List<Produto>? consumidos})
+    : consumidos = consumidos ?? [];
   
   Map<String, dynamic> toMap() {
     return {
@@ -32,7 +33,8 @@ class Comprador {
   String nome;
   List<Produto> comprados;
 
-  Comprador({required this.nome, this.comprados = const []});
+  Comprador({required this.nome, List<Produto>? comprados})
+    : comprados = comprados ?? [];
 
   Map<String, dynamic> toMap() {
     return {

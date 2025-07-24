@@ -21,7 +21,6 @@ class FinancialState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final buyer = selectedEvent!.compradores[buyerIndex];
     final key = 'selected_people_${selectedEvent?.title}_${buyer.nome}';
-
     final jsonString = jsonEncode(_selectedPeople);
     await prefs.setString(key, jsonString);
   }
@@ -74,7 +73,16 @@ class FinancialState extends ChangeNotifier {
     return totalValue;
   }
 
-  void toggleSelectedPerson(Pessoa person, int buyerIndex) {
+  double calculatetotalPaid(int buyerIndex){
+    final paidPeople = _inDebt.where((p) => _selectedPeople[p.nome] ?? false);
+    return paidPeople.fold(0.0, (sum, p) => sum + calculatePersonDebt(p, buyerIndex));
+  }
+
+  double calculateToReceiveValue(double totalValue, int buyerIndex){
+    return totalValue - calculatetotalPaid(buyerIndex);
+  }
+
+  void toggleSelectedPerson(Pessoa person, int buyerIndex) async {
     final current = _selectedPeople[person.nome] ?? false;
     _selectedPeople[person.nome] = !current;
     notifyListeners();
