@@ -13,6 +13,14 @@ class Produto {
     };
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Produto &&
+          runtimeType == other.runtimeType &&
+          nome == other.nome &&
+          valor == other.valor;
+
   factory Produto.fromMap(Map<String, dynamic> map){
     return Produto(
       nome: map['nome'], 

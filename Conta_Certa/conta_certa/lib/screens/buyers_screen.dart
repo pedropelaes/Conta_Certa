@@ -1,7 +1,6 @@
 import 'package:conta_certa/models/event.dart';
 import 'package:conta_certa/models/people.dart';
 import 'package:conta_certa/screens/buyer_finances_screen.dart';
-import 'package:conta_certa/screens/main_screen.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
 import 'package:conta_certa/widgets/dialogs.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:conta_certa/state/events_state.dart';
 
 class BuyersScreen extends StatelessWidget{
   const BuyersScreen({super.key});

@@ -1,6 +1,4 @@
 import 'package:conta_certa/models/product.dart';
-import 'package:conta_certa/screens/main_screen.dart';
-import 'package:conta_certa/screens/settings.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
 import 'package:conta_certa/widgets/dialogs.dart';
@@ -9,6 +7,7 @@ import 'package:conta_certa/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:conta_certa/state/events_state.dart';
 
 class ProductsScreen extends StatefulWidget{
   const ProductsScreen({super.key});

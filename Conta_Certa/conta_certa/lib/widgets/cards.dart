@@ -241,7 +241,7 @@ Widget ValueCard({
               child: Text(
                 value,
                 textAlign: TextAlign.left,
-                style: textTheme.displaySmall?.copyWith(
+                style: textTheme.headlineLarge?.copyWith(
                   fontFamily: 'Inter',
                   color: textColor,
                 ),
@@ -258,6 +258,7 @@ Widget FinancialListCard({
   required ThemeData theme,
   required TextTheme textTheme,
   required BuildContext context,
+  required Widget list,
 }){
   return Card(
     color: theme.colorScheme.secondaryContainer,
@@ -265,6 +266,8 @@ Widget FinancialListCard({
     child: Padding(
       padding: const EdgeInsets.all(15),
       child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.60,
+        width: MediaQuery.of(context).size.width * 0.8,
         child: Column(
           children: [
             Row(
@@ -286,7 +289,7 @@ Widget FinancialListCard({
               ],
             ),
             listDivider(theme: theme),
-
+            Expanded(child: list),
           ],
         ),
       ),
