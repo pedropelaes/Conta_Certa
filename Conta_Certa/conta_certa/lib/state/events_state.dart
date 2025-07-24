@@ -15,6 +15,8 @@ class EventsState extends ChangeNotifier {
     loadEvents();
   }
 
+  // Eventos
+
   Future<void> loadEvents() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getStringList("events") ?? [];
@@ -38,6 +40,10 @@ class EventsState extends ChangeNotifier {
     );
   }
 
+  bool checkEventoExistente(String title){
+    return _events.any((evento) => evento.title == title);
+  }
+
   void deleteEvent(int index) async{
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_events[index].title); // remove os dados do evento
@@ -49,6 +55,8 @@ class EventsState extends ChangeNotifier {
     );
   }
 
+  //Pessoas
+
   List<Pessoa> get pessoas => List.unmodifiable(_selectedEvent!.people);
 
   void addPessoa (String nome){
@@ -58,6 +66,10 @@ class EventsState extends ChangeNotifier {
     Fluttertoast.showToast(
       msg: "Pessoa adicionada.",
     );
+  }
+
+  bool checkPessoaExistente(String nome){
+    return _selectedEvent!.people.any((person) => person.nome == nome);
   }
 
   void editPessoa(int index, String newName){
@@ -78,11 +90,17 @@ class EventsState extends ChangeNotifier {
     );
   }
 
+  //Produtos
+
   void addProduto(String nome, double valor){
     _selectedEvent!.produtos.add(Produto(nome: nome, valor: valor));
     saveSelectedEventToStorage();
     notifyListeners();
     Fluttertoast.showToast(msg: 'Produto adicionado');
+  }
+
+  bool checkProdutoExistente(String nome){
+    return _selectedEvent!.produtos.any((produto) => produto.nome == nome); 
   }
 
   void editProduto(int index, String newName, double newValue){
@@ -104,11 +122,17 @@ class EventsState extends ChangeNotifier {
     );
   }
 
+  //Comprador
+
   void addComprador(String nome){
     _selectedEvent!.compradores.add(Comprador(nome: nome));
     saveSelectedEventToStorage();
     notifyListeners();
     Fluttertoast.showToast(msg: "Comprador adicionado");
+  }
+
+  bool checkCompradorExistente(String nome){
+    return _selectedEvent!.compradores.any((comprador) => comprador.nome == nome);
   }
 
   void editComprador(int index, String newName){
@@ -118,8 +142,13 @@ class EventsState extends ChangeNotifier {
     Fluttertoast.showToast(msg: "Comprador editado");
   }
 
-  void deleteComprador(int index){
+  void deleteComprador(int index)async{
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'selected_people_${_selectedEvent!.title}_${selectedEvent!.compradores[index].nome}';
+
+    await prefs.remove(key); 
     _selectedEvent!.compradores.removeAt(index);
+    
     saveSelectedEventToStorage();
     notifyListeners();
     Fluttertoast.showToast(msg: 'Comprador deletado');
@@ -134,8 +163,8 @@ class EventsState extends ChangeNotifier {
     await prefs.setStringList("events", _events.map((e) => e.toJson()).toList());
   }
 
-  await prefs.setString(_selectedEvent!.title, _selectedEvent!.toJson());
-}
+    await prefs.setString(_selectedEvent!.title, _selectedEvent!.toJson());
+  }
 
   Future<void> selectEventByTitle(String title) async {
     final prefs = await SharedPreferences.getInstance();

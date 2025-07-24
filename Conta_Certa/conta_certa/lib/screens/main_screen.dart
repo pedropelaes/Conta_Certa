@@ -90,7 +90,9 @@ class _MainScreenState extends State<MainScreen> {
               child: AddEventContainer(theme: theme, textTheme: textTheme, context: context, nameController: nameController, descriptionController: descriptionController),
               );
             }
-          );
+          ).then((_){
+            nameController.clear();
+          });
         },
         backgroundColor: theme.colorScheme.primary,
         child: Icon(Icons.add, size: 30, color: theme.colorScheme.onPrimary,),
@@ -176,12 +178,14 @@ Widget AddEventContainer({
         TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Descrição do evento", icon: Icons.segment, controller: descriptionController),
         ButtonDesign(
           onPressed: (){
+            final eventsState = Provider.of<EventsState>(context, listen: false);
             if(nameController.text == ""){
               Fluttertoast.showToast(msg: "O nome do evento é um campo obrigatório.");
+            }else if(eventsState.checkEventoExistente(nameController.text)){
+              Fluttertoast.showToast(msg: "Já existe um evento com esse nome");
             }
             else{
               final navigator = Navigator.of(context);
-              final eventsState = Provider.of<EventsState>(context, listen: false);
               eventsState.addEvent(nameController.text, descriptionController.text);
               nameController.clear();
               descriptionController.clear();

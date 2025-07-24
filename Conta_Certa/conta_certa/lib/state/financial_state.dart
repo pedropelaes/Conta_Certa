@@ -48,30 +48,31 @@ class FinancialState extends ChangeNotifier {
       .toList();
   }
 
-  double calculatePersonDebt(Pessoa person, int buyerIndex){
-    double debt = 0;
-    final buyer = selectedEvent!.compradores[buyerIndex];
-    final products = person.consumidos.where((produto) => buyer.comprados.contains(produto));
-    for(var p in products){
-      debt += p.valor;
-    }
-    return debt;
-  }
+  double calculatePersonDebt(Pessoa person, int buyerIndex) {
+  double debt = 0;
+  final buyer = selectedEvent!.compradores[buyerIndex];
 
-  double calculateTotalValue(int buyerIndex){
-    final buyer = selectedEvent!.compradores[buyerIndex];
-    final people = selectedEvent!.people;
-    double totalValue = 0;
-    List<Produto> toBePaid = people
-      .expand((person) => person.consumidos)
-      .where((produto) => buyer.comprados.contains(produto))
-      .toList();
+  for (var produto in person.consumidos.where((p) => buyer.comprados.contains(p))) {
+    // Contar quantas pessoas consumiram esse produto
+    int consumersCount = selectedEvent!.people
+      .where((pessoa) => pessoa.consumidos.contains(produto))
+      .length;
 
-    for(var produto in toBePaid){
-      totalValue += produto.valor;
+    if (consumersCount > 0) {
+      debt += produto.valor / consumersCount;
     }
-    return totalValue;
   }
+  return debt;
+}
+
+  double calculateTotalValue(int buyerIndex) {
+  final people = selectedEvent!.people;
+  double total = 0;
+  for (var person in people) {
+    total += calculatePersonDebt(person, buyerIndex);
+  }
+  return total;
+}
 
   double calculatetotalPaid(int buyerIndex){
     final paidPeople = _inDebt.where((p) => _selectedPeople[p.nome] ?? false);

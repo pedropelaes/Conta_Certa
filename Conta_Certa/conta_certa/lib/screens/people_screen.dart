@@ -115,6 +115,8 @@ Widget AddPersonContainer({
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Adicionar', onPressed: (){
         if(nameController.text == ""){
           Fluttertoast.showToast(msg: "Por favor, preencha o campo do nome da pessoa.");
+        }else if(eventsState.checkPessoaExistente(nameController.text)){
+          Fluttertoast.showToast(msg: "Já existe uma pessoa com esse nome.");
         }
         else{
           final navigator = Navigator.of(context);
@@ -147,10 +149,17 @@ Widget EditPersonContainer({
       ),
       TextFieldDesign(theme: theme, textTheme: textTheme, hintText: 'Novo nome', icon: Icons.account_circle_outlined, controller: nameController),
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Salvar', onPressed: (){
-        final navigator = Navigator.of(context);
+        if(nameController.text == ""){
+          Fluttertoast.showToast(msg: "Por favor, preencha o campo do nome da pessoa.");
+        }else if(eventsState.checkPessoaExistente(nameController.text)){
+          Fluttertoast.showToast(msg: "Já existe uma pessoa com esse nome.");
+        }
+        else{
+          final navigator = Navigator.of(context);
         eventsState.editPessoa(index, nameController.text);
         nameController.clear();
         navigator.pop();
+        } 
       }),
     ], 
     theme: theme

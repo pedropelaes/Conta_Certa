@@ -32,6 +32,7 @@ Widget buildPersonOption({
                     overflow: TextOverflow.ellipsis,
                     style: textTheme.headlineSmall?.copyWith(
                       color: theme.colorScheme.onSecondaryContainer,
+                      decoration: isChecked ? TextDecoration.lineThrough : null,
                       decorationColor: theme.colorScheme.onSecondaryContainer,
                       decorationThickness: 2,
                       fontFamily: 'Inter'

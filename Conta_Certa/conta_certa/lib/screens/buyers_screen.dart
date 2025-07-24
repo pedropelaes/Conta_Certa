@@ -119,6 +119,8 @@ Widget AddBuyerContainer({
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Adicionar', onPressed: (){
         if(nameController.text == ""){
           Fluttertoast.showToast(msg: "Por favor, preencha o campo do nome do comprador.");
+        }else if(eventsState.checkCompradorExistente(nameController.text)){
+          Fluttertoast.showToast(msg: "Já existe um comprador com esse nome.");
         }
         else{
           final navigator = Navigator.of(context);

@@ -6,6 +6,7 @@ import 'package:conta_certa/widgets/slide_up_container.dart';
 import 'package:conta_certa/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:conta_certa/state/events_state.dart';
 
@@ -91,11 +92,17 @@ Widget AddProductContainer({
       TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Nome do produto", icon: Icons.edit, controller: nameController),
       TextFieldDesign(theme: theme, textTheme: textTheme, hintText: "Valor gasto", icon: Icons.attach_money_rounded, controller: valueController, isNumber: true),
       ButtonDesign(theme: theme, textTheme: textTheme, childText: 'Criar', onPressed: (){
-        final navigator = Navigator.of(context);
-        eventsState.addProduto(nameController.text, double.parse(valueController.text.replaceAll(',', '.')));
-        nameController.clear();
-        valueController.clear();
-        navigator.pop();
+        if(nameController.text == "" || valueController.text == ""){
+          Fluttertoast.showToast(msg: "Por favor, preencha todos os campos.");
+        }else if(eventsState.checkProdutoExistente(nameController.text)){
+          Fluttertoast.showToast(msg: "Já existe um produto com esse nome");
+        }else {
+          final navigator = Navigator.of(context);
+          eventsState.addProduto(nameController.text, double.parse(valueController.text.replaceAll(',', '.')));
+          nameController.clear();
+          valueController.clear();
+          navigator.pop();
+        }
       })
     ], 
     theme: theme

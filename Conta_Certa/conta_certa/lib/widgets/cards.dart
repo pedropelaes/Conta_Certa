@@ -125,6 +125,7 @@ Widget PersonCard({
                     onPressed: onDelete,
                     icon: Icon(Icons.delete, color: Colors.red, size: 40,),
                   ),
+                  if(!isBuyer)
                   PlatformIconButton(
                     onPressed: onEdit,
                     icon: Icon(Icons.edit_outlined, color: theme.colorScheme.onPrimaryContainer, size: 36,),

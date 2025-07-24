@@ -96,49 +96,108 @@ class _SettingsState extends State<Settings> {
               ),
             ),
       ),
-      body: Column(
-        children: [
-          Divider(
-              thickness: 5,
-              color: theme.colorScheme.secondary,
-          ),
-          Card(
-            color: theme.colorScheme.primaryContainer,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: EdgeInsets.all(16),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Tema do aplicativo:",
-                    textAlign: TextAlign.left,
-                    style: textTheme.headlineSmall?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Divider(
+                thickness: 5,
+                color: theme.colorScheme.secondary,
+            ),
+            Card(
+              color: theme.colorScheme.primaryContainer,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Tema do aplicativo:",
+                      textAlign: TextAlign.left,
+                      style: textTheme.headlineSmall?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
                     ),
-                  ),
-                  _buildThemeOption(context: context, text: "Sistema", textStyle: list, isChecked: _themeOptions["system"]!, 
-                  onChanged: (bool? value) => {_onOptionChanged("system", value), themeNotifier.setTheme(ThemeMode.system)}, theme: theme),
-                  listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Claro", textStyle: list, isChecked: _themeOptions["light"]!, 
-                  onChanged: (bool? value)=> {_onOptionChanged("light", value), themeNotifier.setTheme(ThemeMode.light)}, theme: theme),
-                  listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Claro com contraste alto", textStyle: list, isChecked: _themeOptions["light_high_contrast"]!, 
-                  onChanged: (bool? value)=> {_onOptionChanged("light_high_contrast", value), themeNotifier.setTheme(ThemeMode.light, highContrast: true)}, theme: theme),
-                  listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Escuro", textStyle: list, isChecked: _themeOptions["dark"]!, 
-                  onChanged: (bool? value)=> {_onOptionChanged("dark", value), themeNotifier.setTheme(ThemeMode.dark)}, theme: theme),
-                  listDivider(theme: theme),
-                  _buildThemeOption(context: context, text: "Escuro com contraste alto", textStyle: list, isChecked: _themeOptions["dark_high_contrast"]!, 
-                  onChanged: (bool? value)=> {_onOptionChanged("dark_high_contrast", value), themeNotifier.setTheme(ThemeMode.dark, highContrast: true)}, theme: theme),
-                  listDivider(theme: theme),
-                ],
+                    _buildThemeOption(context: context, text: "Sistema", textStyle: list, isChecked: _themeOptions["system"]!, 
+                    onChanged: (bool? value) => {_onOptionChanged("system", value), themeNotifier.setTheme(ThemeMode.system)}, theme: theme),
+                    listDivider(theme: theme),
+                    _buildThemeOption(context: context, text: "Claro", textStyle: list, isChecked: _themeOptions["light"]!, 
+                    onChanged: (bool? value)=> {_onOptionChanged("light", value), themeNotifier.setTheme(ThemeMode.light)}, theme: theme),
+                    listDivider(theme: theme),
+                    _buildThemeOption(context: context, text: "Claro com contraste alto", textStyle: list, isChecked: _themeOptions["light_high_contrast"]!, 
+                    onChanged: (bool? value)=> {_onOptionChanged("light_high_contrast", value), themeNotifier.setTheme(ThemeMode.light, highContrast: true)}, theme: theme),
+                    listDivider(theme: theme),
+                    _buildThemeOption(context: context, text: "Escuro", textStyle: list, isChecked: _themeOptions["dark"]!, 
+                    onChanged: (bool? value)=> {_onOptionChanged("dark", value), themeNotifier.setTheme(ThemeMode.dark)}, theme: theme),
+                    listDivider(theme: theme),
+                    _buildThemeOption(context: context, text: "Escuro com contraste alto", textStyle: list, isChecked: _themeOptions["dark_high_contrast"]!, 
+                    onChanged: (bool? value)=> {_onOptionChanged("dark_high_contrast", value), themeNotifier.setTheme(ThemeMode.dark, highContrast: true)}, theme: theme),
+                    listDivider(theme: theme),
+                  ],
+                ),
               ),
             ),
-          )
-        ],
+            Card(
+              color: theme.colorScheme.primaryContainer,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Column(
+                  children: [
+                    Text(
+                      "Reporte um bug:",
+                      style: textTheme.headlineSmall?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    Text(
+                      'Caso tenha algum problema utilizando nosso app, nos envie um e-mail, ou publique uma issue no nosso repositório!',
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer
+                      ),
+                    ),
+                    Text(
+                      'contacerta025@gmail.com\ngithub.com/pedropelaes/Conta_Certa',
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ]
+                  
+                ),
+              ),
+            ),
+            Card(
+              color: theme.colorScheme.primaryContainer,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Column(
+                  children: [
+                    Text(
+                      "Sobre o app:",
+                      style: textTheme.headlineSmall?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    Text(
+                      'Conta Certa é um aplicativo voltado para facilitar a divisão de gastos em confraternizações como churrascos, festas e encontros entre amigos. Este app é um projeto pessoal, desenvolvido com o intuito de aprendizado.',
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer
+                      ),
+                    ),
+                  ]
+                  
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -139,7 +139,9 @@ void showAddPerson(BuildContext context, TextEditingController nameController, E
       child: AddPersonContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, eventsState: eventsState),
       );
     }
-  );
+  ).then((_){
+    nameController.clear();
+  });
 }
 
 void showAddProduct(BuildContext context, TextEditingController nameController, TextEditingController productValueController,EventsState eventsState){
@@ -155,7 +157,10 @@ void showAddProduct(BuildContext context, TextEditingController nameController, 
       child: AddProductContainer(theme: Theme.of(context), textTheme: TextTheme.of(context), context: context, nameController: nameController, valueController: productValueController, eventsState: eventsState),
       );
     }
-  );
+  ).then((_){
+    nameController.clear();
+    productValueController.clear();
+  });
 }
 
 void showAddBuyer(BuildContext context, TextEditingController nameController, EventsState eventsState){
@@ -172,5 +177,7 @@ void showAddBuyer(BuildContext context, TextEditingController nameController, Ev
         child: AddBuyerContainer(theme: Theme.of(context), textTheme: Theme.of(context).textTheme, context: context, nameController: nameController, eventsState: eventsState),
       );
     }
-  );
+  ).then((_){
+    nameController.clear();
+  });
 }
