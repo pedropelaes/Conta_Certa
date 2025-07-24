@@ -1,7 +1,7 @@
 name: conta_certa
 description: "A Flutter project of an app that helps organize finances from events or get-together"
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.0-alpha.1+1
 
 environment:
   sdk: ^3.8.1
@@ -17,6 +17,7 @@ dependencies:
   shared_preferences: ^2.5.3
   fluttertoast: ^8.2.12
   intl: ^0.20.2
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +28,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/conta_certa_logo.png
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/conta_certa_logo.png"
