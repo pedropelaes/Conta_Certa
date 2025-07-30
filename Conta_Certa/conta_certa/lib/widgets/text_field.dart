@@ -12,7 +12,7 @@ Widget TextFieldDesign({
   String decimalSeparator = ','
 }){
 return TextField(
-  keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+  keyboardType: isNumber ? TextInputType.numberWithOptions(decimal: true) : TextInputType.text,
   inputFormatters: isNumber
         ? [DecimalTextInputFormatter(decimalSeparator: decimalSeparator)] 
         : null,
@@ -35,7 +35,7 @@ return TextField(
 class DecimalTextInputFormatter extends TextInputFormatter {
   final String decimalSeparator;
 
-  DecimalTextInputFormatter({this.decimalSeparator = '.'});
+  DecimalTextInputFormatter({this.decimalSeparator = ','});
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
@@ -45,16 +45,24 @@ class DecimalTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
+    // Substitui o ponto por vírgula automaticamente, se a vírgula for o separador definido
+    if (decimalSeparator == ',' && newText.contains('.')) {
+      newText = newText.replaceAll('.', ',');
+    }
+
     final regExp = RegExp(r'^\d*[' + RegExp.escape(decimalSeparator) + r']?\d*$');
 
     if (!regExp.hasMatch(newText)) {
-      return oldValue; 
+      return oldValue;
     }
 
     if (newText.indexOf(decimalSeparator) != newText.lastIndexOf(decimalSeparator)) {
-      return oldValue; 
+      return oldValue;
     }
 
-    return newValue;
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
   }
 }
