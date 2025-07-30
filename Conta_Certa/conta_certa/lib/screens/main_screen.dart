@@ -1,5 +1,5 @@
 import 'package:conta_certa/screens/event_manager_screen.dart';
-import 'package:conta_certa/screens/settings.dart';
+import 'package:conta_certa/screens/settings_screen.dart';
 import 'package:conta_certa/widgets/buttons.dart';
 import 'package:conta_certa/widgets/cards.dart';
 import 'package:conta_certa/widgets/dialogs.dart';
@@ -78,7 +78,6 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          print("FAB Pressed!");
           showModalBottomSheet(
             context: context, 
             isScrollControlled: true,
