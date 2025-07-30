@@ -69,14 +69,12 @@ class MainApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context); 
     final isHighContrast = themeNotifier.isHighContrast;
 
-    return PlatformApp(
+    return MaterialApp( 
       debugShowCheckedModeBanner: false,
       builder: DevicePreview.appBuilder,
-      material: (_, __) => MaterialAppData(
-      theme: isHighContrast ? lightScheme.lightHighContrast() : lightScheme.light(),
-      darkTheme: isHighContrast ? darkScheme.darkHighContrast() : darkScheme.dark(),
-        themeMode: themeNotifier.themeMode, // Usa o tema do sistema (claro/escuro)
-      ),
+      theme: isHighContrast ? lightScheme.lightHighContrast() : lightScheme.light(), 
+      darkTheme: isHighContrast ? darkScheme.darkHighContrast() : darkScheme.dark(), 
+      themeMode: themeNotifier.themeMode, 
       home: isFirstLaunch ? OpeningScreen() : MainScreen(),
     );
   }
