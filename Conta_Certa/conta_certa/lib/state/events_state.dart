@@ -194,10 +194,24 @@ class EventsState extends ChangeNotifier {
     if(buyer.comprados.contains(product)){
       buyer.comprados.remove(product);
     }else{
-      buyer.comprados.add(product);
+      if(!checkAlreadyBought(product)){ 
+        buyer.comprados.add(product);
+      }else{
+        Fluttertoast.showToast(msg: "Este produto já foi comprado por outro comprador");
+      }
     }
     saveSelectedEventToStorage();
     notifyListeners();
+  }
+
+  bool checkAlreadyBought(Produto product){
+    final buyers = _selectedEvent!.compradores;
+    for(var b in buyers){
+      if(b.comprados.contains(product)){
+        return true;
+      }
+    }
+    return false;
   }
 
 }
