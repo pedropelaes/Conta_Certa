@@ -23,6 +23,7 @@ class _SettingsState extends State<Settings> {
   };
 
   void _onOptionChanged(String optionText, bool? newValue) async {
+     print("Option changed: $optionText, newValue: $newValue");
     if (newValue == false && _themeOptions[optionText] == true){
       int checkedCount = _themeOptions.values.where((value)=>value).length;
       if(checkedCount == 1) return;
@@ -34,9 +35,11 @@ class _SettingsState extends State<Settings> {
       });
       _themeOptions[optionText] = newValue ?? false;
     });
+    print("New _themeOptions: $_themeOptions"); //
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('selected_theme', optionText);
+    print("Theme saved to SharedPreferences: $optionText");
   }
 
   @override

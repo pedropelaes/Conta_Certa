@@ -78,6 +78,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
+          print("FAB Pressed!");
           showModalBottomSheet(
             context: context, 
             isScrollControlled: true,

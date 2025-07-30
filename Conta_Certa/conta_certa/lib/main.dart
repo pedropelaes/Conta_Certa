@@ -49,7 +49,7 @@ void main() async {
         ChangeNotifierProvider<FinancialState>(create: (_) => FinancialState()),
       ],
       child: DevicePreview(
-        enabled: kIsWeb || (!Platform.isAndroid && !Platform.isIOS),
+        enabled: false, //kIsWeb || (!Platform.isAndroid && !Platform.isIOS),
         builder: (context) => MainApp(isFirstLaunch: isFirstLaunch),
       ),
     ),
