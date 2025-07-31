@@ -40,8 +40,8 @@ class _MainScreenState extends State<MainScreen> {
         title: Row(
           children: [ Image.asset(
                 'assets/images/conta_certa_logo.png',
-                width: 60,
-                height: 60,
+                width: 45,
+                height: 45,
                 ),
             
             SizedBox(width: 5,),
@@ -65,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
                 size: 30,
               ),
             ),
-            SizedBox(width: 12,),
+            //SizedBox(width: 12,),
             PlatformIconButton(
               onPressed: (){},
               icon: Icon(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
@@ -14,8 +16,11 @@ Widget dialogDesign ({
   return PlatformAlertDialog(
     title: Text(
       title,
-      style: textTheme.headlineLarge?.copyWith(
-        color: theme.colorScheme.onSurface,
+      style: (Platform.isIOS
+        ? textTheme.headlineMedium
+        : textTheme.headlineLarge
+      )?.copyWith(
+        color: theme.colorScheme.onSurface
       ),
     ),
     content: Text(

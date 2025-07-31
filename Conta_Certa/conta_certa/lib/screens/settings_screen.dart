@@ -95,6 +95,12 @@ class _SettingsState extends State<Settings> {
                 color: theme.colorScheme.onSurface,
               ),
             ),
+        cupertino: (_, __) => CupertinoNavigationBarData(
+          backgroundColor: theme.colorScheme.surface,
+          brightness: theme.brightness == Brightness.dark
+            ? Brightness.dark
+            : Brightness.light
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
