@@ -60,7 +60,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            MediumAppBar(theme: theme, textTheme: textTheme, title: title, onSearch: () {}, ),
+            MediumAppBar(theme: theme, textTheme: textTheme, title: title, onSearch: () {}, hasSearch: false ),
             SliverToBoxAdapter(
               child: 
                 Divider(

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:conta_certa/models/event.dart';
 import 'package:conta_certa/models/people.dart';
-import 'package:conta_certa/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

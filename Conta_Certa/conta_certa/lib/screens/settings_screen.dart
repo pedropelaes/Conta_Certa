@@ -1,10 +1,10 @@
 import 'package:conta_certa/theme/theme_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Settings extends StatefulWidget {
   const Settings ({super.key});
@@ -43,6 +43,7 @@ class _SettingsState extends State<Settings> {
   void initState(){
     super.initState();
     _loadSavedTheme();
+    _getAppVersion();
   }
 
   void _loadSavedTheme() async {
@@ -72,6 +73,17 @@ class _SettingsState extends State<Settings> {
       default:
         themeNotifier.setTheme(ThemeMode.system);
     }
+  }
+
+  String _version = '...';
+  String _buildNumber = '...';
+
+  Future<void> _getAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = packageInfo.version;
+      _buildNumber = packageInfo.buildNumber;
+    });
   }
 
   @override
@@ -166,13 +178,48 @@ class _SettingsState extends State<Settings> {
                           color: theme.colorScheme.onPrimaryContainer
                         ),
                       ),
-                      Text(
-                        'contacerta025@gmail.com\ngithub.com/pedropelaes/Conta_Certa',
-                        style: textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onPrimaryContainer,
-                          fontWeight: FontWeight.bold
+                      SizedBox(height: 4),
+                      InkWell(
+                        onTap: () async {
+                          final Uri emailLaunchUri = Uri(
+                            scheme: 'mailto',
+                            path: "contacerta025@gmail.com",
+                            query: Uri.encodeFull('subject=Reporte de bug&body=Olá, encontrei um problema no app...')
+                          );
+                          if (await canLaunchUrl(emailLaunchUri)) {
+                            await launchUrl(emailLaunchUri);
+                          }
+                        },
+                        child: Text(
+                          'contacerta025@gmail.com',
+                          textAlign: TextAlign.center,
+                          style: textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            decorationColor: theme.colorScheme.onPrimaryContainer
+                          ),
                         ),
                       ),
+                      SizedBox(height: 4),
+                      InkWell(
+                        onTap: () async {
+                          final Uri url = Uri.parse('https://github.com/pedropelaes/Conta_Certa/issues');
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url, mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Text(
+                          'github.com/pedropelaes/Conta_Certa',
+                          textAlign: TextAlign.center,
+                          style: textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.onPrimaryContainer,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            decorationColor: theme.colorScheme.onPrimaryContainer
+                          ),
+                        ),
+                      )
                     ]
                   ),
                 ),
@@ -192,13 +239,35 @@ class _SettingsState extends State<Settings> {
                         ),
                       ),
                       Text(
-                        'Conta Certa é um aplicativo voltado para facilitar a divisão de gastos em confraternizações como churrascos, festas e encontros entre amigos. Este app é um projeto pessoal, desenvolvido com o intuito de aprendizado.',
+                        'Conta Certa é um aplicativo desenvolvido para simplificar a divisão de despesas em confraternizações, como churrascos, festas e encontros entre amigos. Trata-se de um projeto pessoal, criado com foco em aprimoramento técnico e aprendizado em desenvolvimento de software.',
                         style: textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onPrimaryContainer
                         ),
                       ),
                     ]
-                    
+                  ),
+                ),
+              ),
+              Card(
+                color: theme.colorScheme.primaryContainer,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: Column(
+                    children: [
+                      Text("Versão do app: ",
+                        style: textTheme.headlineSmall?.copyWith(
+                          color: theme.colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                      Text(
+                        'V$_version | Build:$_buildNumber',
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onPrimaryContainer
+                        ),
+                      )
+                    ]
                   ),
                 ),
               ),
