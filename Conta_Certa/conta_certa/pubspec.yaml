@@ -1,7 +1,7 @@
 name: conta_certa
 description: "A Flutter project of an app that helps organize finances from events or get-together"
 publish_to: 'none'
-version: 0.1.0-alpha.1+1
+version: 0.1.2-alpha.1+1
 
 environment:
   sdk: ^3.8.1
