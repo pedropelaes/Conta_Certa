@@ -13,6 +13,9 @@ Widget MediumAppBar({
       padding: const EdgeInsets.only(top: 10),
       child: Text(
         title,
+        overflow: TextOverflow.clip,
+        maxLines: 1,
+        softWrap: true,
         style: textTheme.headlineLarge?.copyWith(
           color: theme.colorScheme.onSurface,
         ),
@@ -28,5 +31,6 @@ Widget MediumAppBar({
       ),
     ),
   ],
+  
   );
 }

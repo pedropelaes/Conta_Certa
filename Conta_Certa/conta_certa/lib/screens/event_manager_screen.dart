@@ -53,7 +53,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
     List<String> contents = ["Pessoas", "Produtos", "Compradores"];
-    String title = '${event.title} - ${contents[_currentIndex]}';
+    String title = event.title;
 
     return ChangeNotifierProvider<EventsState>.value(
       value: eventsState,
