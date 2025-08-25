@@ -5,10 +5,10 @@ Com ele, os usuários podem:
 - Adicionar participantes;
 - Registrar os produtos comprados;
 - Relacionar quem consumiu o quê;
-- E, por fim, calcular de forma justa quanto cada pessoa deve pagar.
+- Calcular de forma justa quanto cada pessoa deve pagar;
+- E, por fim, deixa o usuário marcar quem já pagou.
 
-
-[Protótipo](https://www.figma.com/design/H1k957TT1cHE1KEv42gzfp/Conta-Certa?node-id=0-1&t=CoS5ZL7tUImQsi5Q-1)(em progresso)
+[Protótipo](https://www.figma.com/design/H1k957TT1cHE1KEv42gzfp/Conta-Certa?node-id=0-1&t=CoS5ZL7tUImQsi5Q-1)
 
 # Objetivo do Projeto
 Este é um projeto pessoal com o intuito de:
