@@ -40,6 +40,9 @@ class BuyersScreen extends StatelessWidget{
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index){
+              if (index == compradores.length) {
+                return const SizedBox(height: 80); // espaçamento no fim
+              }
               final comprador = compradores[index];
               return PersonCard(
                 isBuyer: true,
@@ -92,7 +95,7 @@ class BuyersScreen extends StatelessWidget{
                 context: context
               );
             },
-            childCount: compradores.length,
+            childCount: compradores.length + 1,
           ),
         );
       }

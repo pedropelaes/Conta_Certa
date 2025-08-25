@@ -52,7 +52,7 @@ class _EventManagerScreenState extends State<EventManagerScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
-    List<String> contents = ["Pessoas", "Produtos", "Compradores"];
+    //List<String> contents = ["Pessoas", "Produtos", "Compradores"];
     String title = event.title;
 
     return ChangeNotifierProvider<EventsState>.value(

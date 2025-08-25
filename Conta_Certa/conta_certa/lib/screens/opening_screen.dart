@@ -25,45 +25,46 @@ class OpeningScreen extends StatelessWidget {
     final double dividerThickness = MediaQuery.of(context).size.height * 0.003;
 
     return PlatformScaffold(
-      body: SingleChildScrollView(
-        child: ConstrainedBox( // makes the content fit in the screen size
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height, // min height is the screen size
-          ),
-          child: IntrinsicHeight(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Spacer(flex: 2,),
-                LogoWithText(screenWidth: screenWidth),
-                Divider(
-                  height: dividerHeight,
-                  thickness: dividerThickness,
-                  indent: 50,
-                  endIndent: 50,
-                  color: theme.colorScheme.primary,
-                ),
-                IntroductionText(responsiveFontSize: responsiveFontSize,),
-                Spacer(flex: 2,),
-                PlatformElevatedButton(
-                  onPressed: () {
-                    _openMainScreen(context);
-                  },
-                  color: theme.colorScheme.primaryContainer,
-                  child: Text("Começar", style: textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsiveFontSize,
-                  ),),
-                ),
-                Spacer(flex: 1,),
-              ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: ConstrainedBox( // makes the content fit in the screen size
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height, // min height is the screen size
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Spacer(flex: 2,),
+                  LogoWithText(screenWidth: screenWidth),
+                  Divider(
+                    height: dividerHeight,
+                    thickness: dividerThickness,
+                    indent: 50,
+                    endIndent: 50,
+                    color: theme.colorScheme.primary,
+                  ),
+                  IntroductionText(responsiveFontSize: responsiveFontSize,),
+                  Spacer(flex: 2,),
+                  PlatformElevatedButton(
+                    onPressed: () {
+                      _openMainScreen(context);
+                    },
+                    color: theme.colorScheme.primaryContainer,
+                    child: Text("Começar", style: textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
+                      fontSize: responsiveFontSize,
+                    ),),
+                  ),
+                  Spacer(flex: 1,),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
-    
   }
 }
 
@@ -140,7 +141,7 @@ class IntroductionText extends StatelessWidget{
             ),
             SizedBox(height: verticalSpacing,),
             Text(
-              'Chega de cálculos complicados e desentendimentos. Em poucos toques, você divide os valores de forma justa e transparente, para que todo mundo aproveite ao máximo sem preocupações.',
+              'Chega de cálculos complicados e desentendimentos. Em poucos toques, você divide os valores de forma justa e transparente, para que todo mundo aproveite ao máximo sem preocupações. Role para baixo, e começe já!',
               textAlign: TextAlign.center,
               style: paragraph,
             )

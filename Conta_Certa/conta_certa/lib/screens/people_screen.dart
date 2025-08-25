@@ -46,11 +46,14 @@ class _PeopleScreenState extends State<PeopleScreen> {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
+              if (index == pessoas.length) {
+                return const SizedBox(height: 80); // espaçamento no fim
+              }
               final person = pessoas[index];
               return PersonCard(
                 theme: theme,
                 textTheme: textTheme,
-                name: person.nome ?? "Unnamed",
+                name: person.nome,
                 onDelete: () { 
                   showPlatformDialog(
                       context: context,
@@ -89,7 +92,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                 context: context
               );
             },
-            childCount: pessoas.length,
+            childCount: pessoas.length + 1,
           ),
         );
       },

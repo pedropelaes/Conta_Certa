@@ -9,6 +9,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:conta_certa/state/events_state.dart';
+import 'package:intl/intl.dart';
 
 class ProductsScreen extends StatefulWidget{
   const ProductsScreen({super.key});
@@ -22,6 +23,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
+    final formatter = NumberFormat("#,##0.00", "pt_BR");
     
     return Consumer<EventsState>(
       builder: (context, eventsState, _){
@@ -44,6 +46,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index){
+              if (index == products.length) {
+                return const SizedBox(height: 80); // espaçamento no fim
+              }
               final produto = products[index];
               return ProductCard(
                 context: context, theme: theme, textTheme: textTheme, 
@@ -62,10 +67,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 }, 
                 onEdit: () => showEditProductContainer(context, produto, index, eventsState),
                 name: produto.nome, 
-                value: produto.valor.toString().replaceAll(',', '.')
+                value: formatter.format(produto.valor)
               );
             },
-            childCount: products.length,
+            childCount: products.length + 1,
           ) 
         );
       }

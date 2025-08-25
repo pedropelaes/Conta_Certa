@@ -239,12 +239,16 @@ Widget ValueCard({
               ),
             ),
             Expanded(
-              child: Text(
-                value,
-                textAlign: TextAlign.left,
-                style: textTheme.headlineLarge?.copyWith(
-                  fontFamily: 'Inter',
-                  color: textColor,
+              child: FittedBox(
+                alignment: Alignment.centerLeft,
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  value,
+                  textAlign: TextAlign.left,
+                  style: textTheme.headlineLarge?.copyWith(
+                    fontFamily: 'Inter',
+                    color: textColor,
+                  ),
                 ),
               ),
             )
