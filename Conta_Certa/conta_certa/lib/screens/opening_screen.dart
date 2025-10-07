@@ -29,7 +29,7 @@ class OpeningScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: ConstrainedBox( // makes the content fit in the screen size
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height, // min height is the screen size
+              //minHeight: MediaQuery.of(context).size.height, // min height is the screen size
             ),
             child: IntrinsicHeight(
               child: Column(
