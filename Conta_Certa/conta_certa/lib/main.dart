@@ -72,7 +72,7 @@ class MainApp extends StatelessWidget {
       theme: isHighContrast ? lightScheme.lightHighContrast() : lightScheme.light(), 
       darkTheme: isHighContrast ? darkScheme.darkHighContrast() : darkScheme.dark(), 
       themeMode: themeNotifier.themeMode, 
-      home:  MainScreen() //isFirstLaunch ? OpeningScreen() : MainScreen(),
+      home: isFirstLaunch ? OpeningScreen() : MainScreen(),
     );
   }
 }
